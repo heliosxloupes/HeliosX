@@ -15,6 +15,12 @@ export const metadata: Metadata = {
   description: 'Empowering residents, doctors, and medical students with premium optics at fair prices. Built by a plastic surgery resident tired of predatory pricing.',
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+}
+
 export default function RootLayout({
   children,
 }: {

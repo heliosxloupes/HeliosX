@@ -696,14 +696,41 @@
 }
 
 @media (max-width: 768px) {
+  .topMargin {
+    padding: 0.14rem 1rem 0.14rem 1rem;
+  }
+
+  .logo {
+    margin-left: 0;
+  }
+
+  .logo img {
+    max-height: 50px;
+  }
+
   .nameRow,
   .cityStateZipRow {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .checkoutForm,
   .orderSummary {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .checkoutTitle {
+    font-size: 1.5rem;
+  }
+
+  .formGroup label {
+    font-size: 0.875rem;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    font-size: 1rem;
+    padding: 0.75rem;
   }
 }
 

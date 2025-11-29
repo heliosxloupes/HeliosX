@@ -189,13 +189,41 @@
 }
 
 @media (max-width: 767px) {
+  .header {
+    top: 1rem;
+    right: 1rem;
+  }
+
   .wrapper {
-    padding: 0 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .navList {
+    gap: 0;
+  }
+
+  .navLink {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .navLink:first-child {
+    padding-left: 0.75rem;
   }
 
   .ctaButton {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+    margin-left: 0.25rem;
+  }
+
+  .cartBadge {
+    top: -4px;
+    right: -4px;
+    font-size: 0.6875rem;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
   }
 }
 
