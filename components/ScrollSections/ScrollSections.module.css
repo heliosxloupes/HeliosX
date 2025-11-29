@@ -1,0 +1,252 @@
+.scrollSections {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 150vw; /* 1.5x viewport width: spacer (50vw) + image grid (100vw) */
+  min-height: 100vh;
+  height: 100vh;
+  padding: 0;
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  will-change: transform;
+  /* Position at same vertical level as Hero section */
+  padding-top: var(--header-height);
+  z-index: 1;
+  pointer-events: none;
+  /* Container will move left, taking image grid with it */
+}
+
+.scrollSections > * {
+  pointer-events: auto;
+}
+
+.imageGridSection {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  height: 100vh;
+  padding: 4rem 2rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  /* Positioned at 100vw in container (directly to the right of device2) */
+}
+
+.imageGridContainer {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 500;
+  color: var(--gold-dark);
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.sectionDescription {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  line-height: 1.6;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.imageCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d0 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(139, 105, 20, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.imagePlaceholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 40%, rgba(139, 105, 20, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(139, 105, 20, 0.03) 0%, transparent 50%);
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--gold-dark);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.cardDescription {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.finalSection {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  height: 100vh;
+  padding: 4rem 2rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.finalContainer {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.finalImageContainer {
+  width: 100%;
+}
+
+.finalImagePlaceholder {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d0 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(139, 105, 20, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 32px rgba(139, 105, 20, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.finalImagePlaceholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(139, 105, 20, 0.08) 0%, transparent 70%);
+}
+
+.finalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.finalTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 500;
+  color: var(--gold-dark);
+  margin: 0;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.finalDescription {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.iconCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.iconPlaceholder {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: rgba(139, 105, 20, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(139, 105, 20, 0.1);
+}
+
+.iconTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--gold-dark);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.iconDesc {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .finalContainer {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .imageGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .imageGridSection,
+  .finalSection {
+    padding: 4rem 1.5rem;
+  }
+
+  .iconGrid {
+    grid-template-columns: 1fr;
+  }
+}
+

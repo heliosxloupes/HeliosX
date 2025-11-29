@@ -1,0 +1,159 @@
+{
+  "designSystemProfile": {
+    "name": "Daylight-Inspired-HeliosX",
+    "purpose": "Provide a consistent visual + structural style reference so an AI (e.g. in Cursor) can generate pages similar in feel to daylightcomputer.com without copying its assets or text.",
+    "brandConcept": {
+      "tone": ["calm", "confident", "human-centric", "mission-driven", "minimal but warm"],
+      "positioning": ["Single hero product", "Health / wellbeing / ethics oriented", "Anti-noise, anti-gimmick", "Premium but approachable"],
+      "voiceGuidelines": {
+        "sentenceStyle": "Short to medium sentences, clear, non-technical unless needed.",
+        "attitude": "Principled and idealistic without being dramatic; focused on solving a real problem.",
+        "avoid": ["shouty sales language", "busy jargon", "overly edgy or meme tone"]
+      }
+    },
+    "layoutSystem": {
+      "pageType": "Single-product marketing site",
+      "maxWidth": "1200-1280px main content width centered on large screens",
+      "grid": {
+        "columnsDesktop": 12,
+        "gutters": "24-32px",
+        "sectionsUse": "Hero uses 2-column layout; feature sections use 2-3 columns; content is vertically stacked, clearly separated."
+      },
+      "sectionRhythm": {
+        "sectionPaddingY": "64-120px depending on importance",
+        "visualPattern": [
+          "Hero: strong statement + key CTAs + supporting product image",
+          "Mission/manifesto: short block of purpose-driven copy",
+          "Feature highlights: icons or small visuals + short headings + 1-3 line descriptions in grid layout",
+          "Use-cases or scenarios: repeated card pattern",
+          "Deep dive links: small navigation row to product/specs/FAQ/support",
+          "Social proof: quotes + external logos",
+          "Ethos/mission: block of text explaining values and structure",
+          "Footer: compact nav + legal + brand line"
+        ]
+      },
+      "navigation": {
+        "style": "Simple top nav with minimal links and one primary CTA button.",
+        "behavior": "Sticky/header-on-scroll.",
+        "contents": ["Logo (text + simple mark)", "3-5 top level links", "\"Order\" or \"Shop\" CTA aligned right"]
+      },
+      "hero": {
+        "structure": {
+          "left": ["Product/company tagline", "Primary headline (1-2 lines)", "Short explanatory paragraph", "Primary CTA button", "Secondary CTA (e.g. Learn more / See how it works)", "Micro trust indicators (stock/ship info, benefit bullets)"],
+          "right": ["Single clean product visual or mockup", "No clutter; one focal object"]
+        },
+        "feeling": "Immediate clarity: what the product is, why it matters, how to get it."
+      },
+      "contentHierarchy": {
+        "order": ["Hero (what/why/CTA)", "Ethical/mission statement (why this exists)", "Core product benefit trio (3–4 pillars)", "Feature deep-dive / technical explanation", "Use-cases / scenarios", "Ecosystem / long-term vision", "Social proof (quotes, press logos)", "FAQ", "Support / contact", "Footer"]
+      }
+    },
+    "colorSystem": {
+      "overallMood": "Minimal, high contrast, with one strong accent color. Backgrounds often light/neutral or soft gradient; plenty of white/negative space.",
+      "palette": {
+        "backgroundPrimary": "#FFFFFF",
+        "backgroundSections": ["#F5F5F5", "#FAFAFA"],
+        "textPrimary": "#111111",
+        "textSecondary": "#4A4A4A",
+        "accentPrimary": "#F5B544",
+        "accentSecondary": "#111111",
+        "borderSubtle": "rgba(0,0,0,0.1)",
+        "usageGuidelines": {
+          "accentUsage": "Use accent color for primary CTAs and key highlights; keep palette restrained.",
+          "backgroundUsage": "Alternate soft sections to visually separate themes.",
+          "avoid": "Loud multi-color gradients or more than three core brand colors."
+        }
+      }
+    },
+    "typographySystem": {
+      "typeMood": "Clean, modern, neutral sans-serif; feels editorial, not corporate.",
+      "fonts": {
+        "primary": "Inter, SF Pro, Satoshi, or similar geometric sans-serif",
+        "weights": ["300", "400", "500", "600"]
+      },
+      "scale": {
+        "heroTitle": "clamp(40px, 6vw, 64px)",
+        "sectionTitle": "24-32px",
+        "body": "16-18px",
+        "microcopy": "10-12px"
+      },
+      "styles": {
+        "headlines": "Tight leading, strong but not ultra bold, sentence-case.",
+        "body": "Comfortable line-height (1.5–1.7).",
+        "emphasis": "Color and weight shifts only, no underlines."
+      }
+    },
+    "componentSystem": {
+      "buttons": {
+        "primary": {
+          "shape": "Rounded pill",
+          "background": "#F5B544",
+          "text": "#111111",
+          "hover": "Slight darken + soft shadow"
+        },
+        "secondary": {
+          "style": "Outline with subtle border",
+          "usage": "Secondary CTAs or navigation"
+        }
+      },
+      "cards": {
+        "usage": "Feature explanations, use cases, FAQs, spec highlights.",
+        "style": {
+          "background": "#FFFFFF",
+          "border": "rgba(0,0,0,0.08)",
+          "radius": "12px",
+          "shadow": "0 1px 3px rgba(0,0,0,0.08)"
+        }
+      },
+      "featureGrid": {
+        "pattern": "3 or 4 columns on desktop, stacked on mobile",
+        "contentType": "Icon + heading + paragraph"
+      },
+      "testimonialBlock": {
+        "layout": "Quotes in minimal cards with small name/role",
+        "style": "Light, uncluttered"
+      },
+      "faq": {
+        "structure": "Collapsible Q&A list",
+        "copyStyle": "Direct and concise"
+      }
+    },
+    "imageryAndIconography": {
+      "imageryStyle": {
+        "concept": ["Focus on product in context", "Clean backdrops or minimal surfaces", "Soft natural light"],
+        "avoid": ["Busy collages", "Harsh filters", "Stock-photo feel"],
+        "note": "Never copy original site's images—replicate the calm, premium atmosphere only."
+      },
+      "icons": {
+        "style": "Simple line or minimal filled icons, consistent stroke width",
+        "color": "#111111"
+      }
+    },
+    "motionAndInteractions": {
+      "scrollBehavior": "Smooth continuous scroll",
+      "animationStyle": {
+        "entrance": "Subtle fade/slide in",
+        "hover": "Micro transitions (scale 1.02, soft shadow, color shift)"
+      }
+    },
+    "informationArchitecture": {
+      "primaryNavLinks": ["Home", "Product", "Specs", "FAQ", "Support"],
+      "footerLinks": ["Home", "Product", "FAQ", "Privacy", "Terms"],
+      "iaPrinciples": {
+        "focus": "One core product, clear purpose",
+        "clarity": "Each section answers one user question",
+        "depth": "Subpages hold technical details"
+      }
+    },
+    "usageForAI": {
+      "generationGuidelines": [
+        "Prioritize clarity: one main product, one CTA above the fold.",
+        "Large typography, generous spacing, restrained palette.",
+        "Use repeating grid patterns for consistency.",
+        "Include a mission or values section tied to affordability and ethics.",
+        "Include subtle trust indicators like testimonials or hospital usage."
+      ]
+    }
+  }
+}
+

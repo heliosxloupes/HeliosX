@@ -1,0 +1,126 @@
+{
+  "designSystemProfile": {
+    "name": "Daylight-Inspired Minimal Product Design",
+    "purpose": "Define the aesthetic, structure, and design principles from the Daylight DC-1 product website to replicate its clean, premium style for other projects.",
+    "overallAesthetic": {
+      "tone": ["calm", "premium", "human-centered", "bright", "tactile"],
+      "mood": "A balance of high-end consumer tech and natural softness — blending engineering precision with organic warmth.",
+      "styleKeywords": ["minimalist", "editorial", "product-focused", "airy", "functional"]
+    },
+    "colorSystem": {
+      "primaryBackground": "#F8F5F1",
+      "secondaryBackground": "#FFFFFF",
+      "accent": "#FF9D00",
+      "textPrimary": "#111111",
+      "textSecondary": "#5C5C5C",
+      "borders": "rgba(0,0,0,0.05)",
+      "usageGuidelines": {
+        "backgroundUsage": "Large soft neutrals; use white or near-white for most sections.",
+        "accentUsage": "High contrast call-to-action buttons or small highlights (e.g., price, order button).",
+        "textUsage": "Use rich black for main headings, softer gray for body text."
+      }
+    },
+    "typography": {
+      "typeMood": "Elegant and readable; modern serif paired with a humanist sans-serif.",
+      "fontPairs": {
+        "primary": "Modern serif (e.g., 'Recoleta', 'Spectral', 'Libre Baskerville')",
+        "secondary": "Neutral sans-serif (e.g., 'Inter', 'Helvetica Neue', 'Satoshi')"
+      },
+      "scale": {
+        "heroTitle": "clamp(48px, 7vw, 72px)",
+        "sectionTitle": "32px–48px",
+        "body": "18px–20px",
+        "microcopy": "13px–14px"
+      },
+      "styles": {
+        "headlines": "Sentence-case with subtle tracking; ample line-height.",
+        "body": "Balanced leading (1.6–1.8); maximum readability.",
+        "emphasis": "Use weight contrast, not color or italics."
+      }
+    },
+    "layoutSystem": {
+      "pageStructure": [
+        "Header (logo, minimal nav, primary CTA)",
+        "Hero section (large product photo + concise pitch)",
+        "Key Features grid (3–6 items with icons/text)",
+        "Product details (image gallery + description block)",
+        "Technical specs (grid layout, 3-column on desktop)",
+        "FAQ or testimonial section (light dividers, calm spacing)",
+        "Footer (secondary links + small print)"
+      ],
+      "containerWidth": "max-width: 1200px",
+      "grid": {
+        "columns": 12,
+        "gutter": "24px",
+        "behavior": "Centered layout with large white margins, vertical rhythm between 80–120px per section."
+      },
+      "visualRhythm": {
+        "sectionSpacing": "min(12vh, 140px)",
+        "horizontalPadding": "clamp(16px, 5vw, 80px)",
+        "alignment": "Left-aligned text with right-heavy imagery for hero/product sections."
+      }
+    },
+    "components": {
+      "hero": {
+        "layout": "2-column split (image left, content right)",
+        "content": ["Product image", "Headline", "Subheadline", "Price + Add to Cart"],
+        "style": {
+          "background": "#FFFFFF",
+          "shadow": "subtle soft drop (0 2px 6px rgba(0,0,0,0.05))"
+        }
+      },
+      "button": {
+        "primary": {
+          "background": "#FF9D00",
+          "color": "#111111",
+          "radius": "8px",
+          "weight": "medium",
+          "hover": "darken background slightly with smooth transition"
+        },
+        "secondary": {
+          "style": "text link with subtle underline",
+          "color": "#111111"
+        }
+      },
+      "featureCard": {
+        "layout": "Icon or photo above heading, then one-sentence description.",
+        "background": "#FFFFFF",
+        "border": "rgba(0,0,0,0.05)",
+        "radius": "12px",
+        "shadow": "0 1px 3px rgba(0,0,0,0.08)",
+        "spacing": "40–60px padding"
+      },
+      "productGallery": {
+        "behavior": "Carousel or image grid; large hero photo + thumbnails.",
+        "interaction": "Soft shadow hover or slight elevation on active image."
+      },
+      "specGrid": {
+        "structure": "3-column card layout (Display / Performance / Connectivity)",
+        "background": "#F8F5F1",
+        "contentStyle": "Each column features small image, bold heading, 1-line description, subtle divider below."
+      },
+      "faq": {
+        "layout": "Accordion with thin dividing lines",
+        "style": "Minimal, calm spacing, no heavy icons"
+      },
+      "footer": {
+        "layout": "Simple, one-line navigation links and brand mark",
+        "style": {
+          "background": "#F8F5F1",
+          "textColor": "#5C5C5C",
+          "spacing": "Minimal padding, subtle borders"
+        },
+        "content": ["Navigation links", "Brand mark/logo", "Legal/copyright text"]
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+

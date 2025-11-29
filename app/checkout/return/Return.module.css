@@ -1,0 +1,354 @@
+.successPage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  padding-top: var(--header-height);
+}
+
+.imageContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100vw - 4rem);
+  height: calc(100vh - 4rem);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .imageContainer {
+    width: calc(100vw - 2rem);
+    height: calc(100vh - 2rem);
+    border-radius: 16px;
+  }
+}
+
+.imageTextOverlay {
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+  z-index: 10;
+  max-width: 600px;
+  pointer-events: none;
+}
+
+.imageHeadline {
+  font-family: var(--font-serif, 'Georgia', serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: #ffffff;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.imageSubheadline {
+  font-family: var(--font-system, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.imageThirdLine {
+  font-family: var(--font-system, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: clamp(1rem, 2vw, 1.375rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.newsletterContainer {
+  position: fixed;
+  bottom: calc(3rem + 6rem); /* Same as home page */
+  right: calc(4rem + 6rem); /* Same as home page */
+  z-index: 40;
+}
+
+/* Newsletter element - Exact same as home page */
+.bottomNewsletter {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+  max-width: 280px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  transform: translateZ(0) scale(1);
+  will-change: transform, box-shadow;
+  overflow: visible;
+  width: 100%;
+}
+
+.bottomNewsletter::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 155, 0, 0.3), rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+.bottomNewsletter:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 155, 0, 0.5);
+  transform: translateZ(0) scale(1.02);
+  box-shadow: 0 8px 24px rgba(255, 155, 0, 0.2), 0 0 0 1px rgba(255, 155, 0, 0.1);
+}
+
+.bottomNewsletter:hover::before {
+  opacity: 1;
+}
+
+.bottomNewsletterClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.bottomNewsletterClose:hover {
+  opacity: 0.7;
+}
+
+.bottomNewsletterTitle {
+  font-family: var(--font-system);
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+
+.bottomNewsletterText {
+  font-family: var(--font-system);
+  font-size: 12px;
+  font-weight: 400;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.bottomNewsletterEmailContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: scaleX(0.9) translateX(20px);
+  transform-origin: right center;
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  top: 0;
+  width: 280px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 155, 0, 0.3);
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.bottomNewsletter:hover .bottomNewsletterEmailContainer {
+  opacity: 1;
+  transform: scaleX(1) translateX(0);
+  padding: 1.5rem;
+  pointer-events: all;
+}
+
+.bottomNewsletterEmailInput {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #FFFFFF;
+  font-family: var(--font-system);
+  font-size: 14px;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.bottomNewsletterEmailInput::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.bottomNewsletterEmailInput:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bottomNewsletterSubmit {
+  background: #FF9B00;
+  color: #000000;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-system);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bottomNewsletterSubmit:hover {
+  background: #FFB033;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 155, 0, 0.3);
+}
+
+/* Social Media - Mid Left */
+.socialMediaContainer {
+  position: absolute;
+  left: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.socialMediaText {
+  font-family: var(--font-system, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.02em;
+}
+
+.socialMediaIcons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.socialIcon:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 155, 0, 0.6);
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 16px rgba(255, 155, 0, 0.3);
+}
+
+.socialIcon:active {
+  transform: translateY(0) scale(1.05);
+}
+
+.socialIcon svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.socialIcon:hover svg {
+  transform: scale(1.1);
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--header-height));
+  padding: 4rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .imageTextOverlay {
+    top: 2rem;
+    left: 2rem;
+    max-width: 85%;
+  }
+
+  .imageHeadline {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .imageSubheadline {
+    font-size: clamp(1.125rem, 3.5vw, 1.375rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .imageThirdLine {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+  }
+
+  .newsletterContainer {
+    bottom: calc(2rem + 3rem); /* Adjusted for mobile */
+    right: calc(2rem + 3rem); /* Adjusted for mobile */
+  }
+
+  .socialMediaContainer {
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .socialMediaText {
+    font-size: clamp(0.875rem, 2vw, 1.125rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .socialIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .socialIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
