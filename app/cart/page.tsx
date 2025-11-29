@@ -104,7 +104,7 @@ function CartContent() {
           <div className={styles.imageSection}>
             <div className={styles.productImageWrapper}>
               <Image
-                src="/girlinmirror1.png"
+                src="/Galileo/girlinmirror1.png"
                 alt="Checkout"
                 fill
                 style={{ objectFit: 'cover' }}
@@ -212,10 +212,10 @@ function CartContent() {
                       // Get the correct main image for each product
                       const getProductImage = (slug: string) => {
                         const imageMap: Record<string, string> = {
-                          'galileo': '/GalileoMain2.png',
-                          'newton': '/NewtonMain.png',
-                          'kepler': '/Kfinal.jpg',
-                          'apollo': '/Apollofinal.png',
+                          'galileo': '/Galileo/GalileoMain2.png',
+                          'newton': '/Newton/NewtonMain.png',
+                          'kepler': '/Keppler/Kfinal.jpg',
+                          'apollo': '/Apollo/Apollofinal.png',
                         }
                         return imageMap[slug] || (item.image || '/loupesondesk2.png')
                       }

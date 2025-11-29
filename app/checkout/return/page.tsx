@@ -59,7 +59,7 @@ function ReturnContent() {
         <main className={styles.successPage}>
           <div className={styles.imageContainer}>
             <Image
-              src="/Apollo3xAsian.png"
+              src="/Apollo/Apollo3xAsian.png"
               alt="Success"
               fill
               style={{ objectFit: 'cover' }}

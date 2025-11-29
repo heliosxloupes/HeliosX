@@ -48,10 +48,10 @@ export default function ProductMenuPage() {
   ]
 
   const productImages = [
-    '/GalileoMainProduct.png',
-    '/NewtonMainProduct.png',
-    '/ApollomainProduct.png',
-    '/KepplerMainProduct.png',
+    '/Galileo/GalileoMainProduct.png',
+    '/Newton/NewtonMainProduct.png',
+    '/Apollo/ApollomainProduct.png',
+    '/Keppler/KepplerMainProduct.png',
   ]
 
   const productData = [
@@ -60,21 +60,21 @@ export default function ProductMenuPage() {
       name: 'Galileo Surgical Loupes',
       shortName: 'Galileo',
       price: 499,
-      image: '/GalileoMainProduct.png',
+      image: '/Galileo/GalileoMainProduct.png',
     },
     {
       slug: 'newton',
       name: 'Newton Surgical Loupes',
       shortName: 'Newton',
       price: 449,
-      image: '/NewtonMainProduct.png',
+      image: '/Newton/NewtonMainProduct.png',
     },
     {
       slug: 'apollo',
       name: 'Apollo Surgical Loupes',
       shortName: 'Apollo',
       price: 599,
-      image: '/ApollomainProduct.png',
+      image: '/Apollo/ApollomainProduct.png',
     },
     {
       slug: 'kepler',

@@ -95,10 +95,10 @@ function CheckoutContent() {
   // Get the correct main image for each product
   const getProductImageForItem = (slug: string) => {
     const imageMap: Record<string, string> = {
-      'galileo': '/GalileoMain2.png',
-      'newton': '/NewtonMain.png',
-      'kepler': '/Kfinal.jpg',
-      'apollo': '/Apollofinal.png',
+      'galileo': '/Galileo/GalileoMain2.png',
+      'newton': '/Newton/NewtonMain.png',
+      'kepler': '/Keppler/Kfinal.jpg',
+      'apollo': '/Apollo/Apollofinal.png',
     }
     return imageMap[slug] || '/loupesondesk2.png'
   }

@@ -715,7 +715,7 @@ export default function Hero() {
           <div className={styles.imageCard}>
             <div className={styles.imageCardInner}>
               <Image
-                src="/girlinmirror.png"
+                src="/Galileo/girlinmirror1.png"
                 alt="Girl in mirror"
                 fill
                 style={{ objectFit: 'cover' }}
@@ -739,7 +739,7 @@ export default function Hero() {
           <div className={styles.imageCard}>
             <div className={styles.imageCardInner}>
               <Image
-                src="/girldirectshot.png"
+                src="/Galileo/girldirectshot.png"
                 alt="Girl direct shot"
                 fill
                 style={{ objectFit: 'cover' }}
@@ -795,7 +795,7 @@ export default function Hero() {
       >
         <div className={styles.directblondImageInner}>
           <Image
-            src="/BlonddirectNew.png"
+            src="/Galileo/BlonddirectNew.png"
             alt="Blond direct"
             fill
             style={{ objectFit: 'contain', borderRadius: '16px' }}

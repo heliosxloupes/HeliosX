@@ -35,10 +35,10 @@ export async function POST(req: NextRequest) {
 
     // Map product slugs to image paths
     const productImagePaths: Record<string, string> = {
-      'galileo': '/GalileoMain2.png',
-      'apollo': '/Apollofinal.png',
-      'kepler': '/Kfinal.jpg',
-      'newton': '/NewtonMain.png',
+      'galileo': '/Galileo/GalileoMain2.png',
+      'apollo': '/Apollo/Apollofinal.png',
+      'kepler': '/Keppler/Kfinal.jpg',
+      'newton': '/Newton/NewtonMain.png',
     }
 
     // Get the base URL for images
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
       console.log('Processing item:', item.productSlug, item.quantity, 'stripeProductId:', item.stripeProductId, 'selectedMagnification:', item.selectedMagnification)
       const priceInCents = productPriceMap[item.productSlug] || (item.price * 100)
       const baseProductName = productNameMap[item.productSlug] || `${item.productSlug} Surgical Loupes`
-      const imagePath = productImagePaths[item.productSlug] || '/GalileoMain2.png'
+      const imagePath = productImagePaths[item.productSlug] || '/Galileo/GalileoMain2.png'
       
       // 1. Add the base product line item
       const baseProductId = productIdMap[item.productSlug]

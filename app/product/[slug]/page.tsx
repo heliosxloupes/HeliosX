@@ -363,19 +363,19 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
   const thumbnailImages = useMemo(() => {
     const config: Record<string, string[]> = {
-      'galileo': ['/GalileoMain2.png', '/BlackguyGalileo.png', '/BlonddirectNew.png', '/Oldguy4Galileo.png'],
-      'kepler': ['/KepplerNewmain.png', '/KepplerMain.png', '/Keppler4.png', '/Keppler2.png'],
-      'apollo': ['/Apollofinal.png', '/Apollo3xfemale2.png', '/Blondcloseup.png', '/Apollo3xAsian.png'],
-      'newton': ['/NewtonMain.png', '/NewtonAsian2.png', '/whiteasianNewton.png', '/old guy.png'],
+      'galileo': ['/Galileo/GalileoMain2.png', '/Galileo/BlackguyGalileo.png', '/Galileo/BlonddirectNew.png', '/Oldguy4Galileo.png'],
+      'kepler': ['/Keppler/KepplerNewmain.png', '/Keppler/KepplerMain.png', '/Keppler/Keppler4.png', '/Keppler/Keppler2.png'],
+      'apollo': ['/Apollo/Apollofinal.png', '/Apollo/Apollo3xFemale2.png', '/Apollo/Blondcloseup.png', '/Apollo/Apollo3xAsian.png'],
+      'newton': ['/Newton/NewtonMain.png', '/Newton/NewtonAsian2.png', '/whiteasianNewton.png', '/old guy.png'],
     }
     return config[params.slug] || config['galileo']
   }, [params.slug])
 
   const mainImage = useMemo(() => {
-    if (params.slug === 'galileo') return '/GalileoMain2.png'
-    if (params.slug === 'newton') return '/NewtonMain.png'
-    if (params.slug === 'kepler') return '/KepplerNewmain.png'
-    if (params.slug === 'apollo') return '/Apollofinal.png'
+    if (params.slug === 'galileo') return '/Galileo/GalileoMain2.png'
+    if (params.slug === 'newton') return '/Newton/NewtonMain.png'
+    if (params.slug === 'kepler') return '/Keppler/KepplerNewmain.png'
+    if (params.slug === 'apollo') return '/Apollo/Apollofinal.png'
     return '/loupesondesk2.png'
   }, [params.slug])
 
@@ -2971,7 +2971,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                   <div className={styles.specsImageRow}>
                     <div className={styles.specsImagePlaceholder}>
                       <Image
-                        src={params.slug === 'apollo' ? "/Apollofinal.png" : params.slug === 'newton' ? "/H2.3.png" : params.slug === 'kepler' ? "/Kfinal.jpg" : "/Locker room.png"}
+                        src={params.slug === 'apollo' ? "/Apollo/Apollofinal.png" : params.slug === 'newton' ? "/Newton/H2.3.png" : params.slug === 'kepler' ? "/Keppler/Kfinal.jpg" : "/Galileo/Locker room.png"}
                         alt={params.slug === 'apollo' ? "Apollo" : params.slug === 'newton' ? "H2.3" : params.slug === 'kepler' ? "Kfinal" : "Locker room"}
                         fill
                         style={{ objectFit: 'cover' }}
@@ -2988,7 +2988,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                     </div>
                     <div className={styles.specsImagePlaceholder}>
                       <Image
-                        src={params.slug === 'apollo' ? "/Blondcloseup.png" : params.slug === 'newton' ? "/NewtonAsian3.png" : params.slug === 'kepler' ? "/Keplerextra.png" : "/Homepage1.png"}
+                        src={params.slug === 'apollo' ? "/Apollo/Blondcloseup.png" : params.slug === 'newton' ? "/Newton/NewtonAsian3.png" : params.slug === 'kepler' ? "/Keppler/Keplerextra.png" : "/Galileo/Homepage1.png"}
                         alt={params.slug === 'apollo' ? "Blond closeup" : params.slug === 'newton' ? "Newton Asian 3" : params.slug === 'kepler' ? "Kepler extra" : "Homepage"}
                         fill
                         style={{ objectFit: 'cover' }}
@@ -3005,7 +3005,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                     </div>
                     <div className={styles.specsImagePlaceholder}>
                       <Image
-                        src={params.slug === 'apollo' ? "/Apollowomanscrubbing.png" : params.slug === 'newton' ? "/H2Product.png" : params.slug === 'kepler' ? "/KepplerMain2.png" : "/girlinmirror1.png"}
+                        src={params.slug === 'apollo' ? "/Apollo/Apollowomanscrubbing.png" : params.slug === 'newton' ? "/Newton/H2Product.png" : params.slug === 'kepler' ? "/Keppler/KepplerMain2.png" : "/Galileo/girlinmirror1.png"}
                         alt={params.slug === 'apollo' ? "Apollo woman scrubbing" : params.slug === 'newton' ? "H2 Product" : params.slug === 'kepler' ? "Keppler Main 2" : "Girl in mirror"}
                         fill
                         style={{ objectFit: 'cover' }}
