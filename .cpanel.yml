@@ -1,6 +1,10 @@
 ---
 deployment:
   tasks:
+    - /bin/echo "Cleaning previous installations..."
+    - rm -rf node_modules package-lock.json
+    - /bin/echo "Clearing npm cache..."
+    - npm cache clean --force
     - /bin/echo "Installing dependencies..."
     - npm install --legacy-peer-deps
     - /bin/echo "Building Next.js application..."
