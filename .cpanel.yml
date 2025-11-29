@@ -1,10 +1,7 @@
 ---
 deployment:
   tasks:
-    - export REPOPATH=/home/helijhrv/repositories/HeliosX
-    - cd $REPOPATH
     - /bin/echo "Installing dependencies..."
     - npm install --legacy-peer-deps
     - /bin/echo "Building Next.js application..."
     - npm run build
-    - /bin/echo "Deployment complete!"
