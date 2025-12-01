@@ -133,6 +133,9 @@
   border: 1px solid rgba(200, 190, 175, 0.3);
   border-left: none;
   border-right: none;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .mainImage {
@@ -149,7 +152,8 @@
   margin: 0;
   /* GPU acceleration */
   transform: translateZ(0);
-  /* Only use will-change when actively animating */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .viewSpecsButtonOverlay {
@@ -459,6 +463,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .mainImageThumbnail:hover {
@@ -496,7 +503,8 @@
   overflow: hidden;
   /* GPU acceleration */
   transform: translateZ(0);
-  /* Remove will-change as it can hurt performance when overused */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .thumbnail:hover {
@@ -975,6 +983,9 @@
   justify-content: center;
   border: 2px solid transparent;
   flex-shrink: 0;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .frameThumbnail:hover {
@@ -1145,6 +1156,9 @@
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border: 2px solid rgba(255, 155, 0, 0.3);
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .framePreviewImage img {
@@ -1394,6 +1408,9 @@
 }
 
 .magnificationIconCard {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -1974,6 +1991,9 @@
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .specsImagePlaceholder img {
@@ -2112,6 +2132,9 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .bottomImage::before {

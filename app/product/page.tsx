@@ -1,15 +1,23 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import Image from 'next/image'
-import LightRays from '@/components/LightRays'
 import Noise from '@/components/Noise'
 import { addToCart, getCart } from '@/lib/cart'
 // Component added by Ansh - github.com/ansh-dhanani
 import GradualBlur from '@/components/GradualBlur'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Lenis from 'lenis'
+import ScrollReveal from '@/components/ScrollReveal'
 import styles from './ProductMenu.module.css'
+
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 export default function ProductMenuPage() {
   const router = useRouter()
@@ -48,10 +56,19 @@ export default function ProductMenuPage() {
   ]
 
   const productImages = [
-    '/Galileo/GalileoMainProduct.png',
-    '/Newton/NewtonMainProduct.png',
-    '/Apollo/ApollomainProduct.png',
-    '/Keppler/KepplerMainProduct.png',
+    '/Galileo/GalileoMainProduct(notext).png',
+    '/Newton/NewtonMainProduct(notext).png',
+    '/Apollo/ApollomainProduct(Notext).png',
+    '/Keppler/KepplerMainProduct(Notext).png',
+  ]
+
+  const productTitles = ['Galileo', 'Newton', 'Apollo', 'Keppler']
+  
+  const productMagnifications = [
+    '2.5x • 3.0x • 3.5x',  // Galileo
+    '2.5x • 3.0x • 3.5x',  // Newton
+    '3.0x • 4.0x • 5.0x • 6.0x',  // Apollo
+    '4.0x • 5.0x • 6.0x'   // Keppler
   ]
 
   const productData = [
@@ -84,6 +101,19 @@ export default function ProductMenuPage() {
       image: '/KepplerMainProduct.png',
     },
   ]
+
+  const handleScrollArrowClick = () => {
+    if (titleTextContainerRef.current && lenisRef.current) {
+      const targetSection = titleTextContainerRef.current.closest('section')
+      if (targetSection) {
+        const targetPosition = targetSection.offsetTop
+        lenisRef.current.scrollTo(targetPosition, {
+          duration: 1.5,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        })
+      }
+    }
+  }
 
   const handleImageClick = (index: number) => {
     setSelectedIndex(index)
@@ -119,10 +149,15 @@ export default function ProductMenuPage() {
     }, 500) // Delay for smoother click animation
   }
 
-  const [scrollProgress, setScrollProgress] = useState(0)
   const pageRef = useRef<HTMLElement>(null)
   const imageRefs = useRef<(HTMLDivElement | null)[]>([])
-  const rafRef = useRef<number | null>(null)
+  const productSectionRef = useRef<HTMLDivElement>(null)
+  const productCardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const titleTextContainerRef = useRef<HTMLDivElement>(null)
+  const arrowRef = useRef<SVGPathElement>(null)
+  const productTitleRefs = useRef<(HTMLDivElement | null)[]>([])
+  const productMagnificationRefs = useRef<(HTMLDivElement | null)[]>([])
+  const galileoCardRef = useRef<HTMLDivElement>(null)
 
   // Track which products have started animating
   const animationStartedRef = useRef<{ [key: number]: boolean }>({})
@@ -183,175 +218,438 @@ export default function ProductMenuPage() {
     }
   }, [])
 
-  // Scroll-based animation for all text overlays (matches image behavior)
-  useEffect(() => {
-    const handleScroll = () => {
-      textOverlayRefs.current.forEach((textOverlayRef, index) => {
-        if (!textOverlayRef) return
-        
-        // Use the same transform logic as each image
-        const imageProgress = scrollProgress - index
 
-        // Same logic as getImageTransform: starts moving up after 30% scroll
-        if (imageProgress < 0.3) {
-          textOverlayRef.style.transform = 'translateY(-50%)'
-          textOverlayRef.style.opacity = '1'
-        } else if (imageProgress >= 0.3 && imageProgress < 0.7) {
-          const moveProgress = (imageProgress - 0.3) / 0.4 // 0 to 1
-          const translateY = -moveProgress * 120 // Move up 120vh
-          const opacity = 1 - moveProgress
-          textOverlayRef.style.transform = `translateY(calc(-50% + ${translateY}vh))`
-          textOverlayRef.style.opacity = String(Math.max(0, opacity))
-        } else {
-          // After 70% scroll, fully faded and moved up
-          textOverlayRef.style.transform = 'translateY(calc(-50% + -120vh))'
-          textOverlayRef.style.opacity = '0'
+  // Refs for the 3D image layers
+  const layeredImageSectionRef = useRef<HTMLDivElement>(null)
+  const basexImageRef = useRef<HTMLDivElement>(null)
+  const basex1ImageRef = useRef<HTMLDivElement>(null)
+  const basex2ImageRef = useRef<HTMLDivElement>(null)
+  const basex3ImageRef = useRef<HTMLDivElement>(null)
+  const basex4ImageRef = useRef<HTMLDivElement>(null)
+  const logoContainerRef = useRef<HTMLDivElement>(null)
+  const lenisRef = useRef<Lenis | null>(null)
+  const scrollArrowRef = useRef<HTMLDivElement>(null)
+
+  // Setup Lenis and GSAP ScrollTrigger for 3D layered images
+  useLayoutEffect(() => {
+    // Initialize Lenis
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
+    })
+
+    lenisRef.current = lenis
+
+    // Function to set scroll limit based on final state
+    const setScrollLimit = () => {
+      if (layeredImageSectionRef.current && titleTextContainerRef.current && productSectionRef.current) {
+        const titleSection = titleTextContainerRef.current.closest('section')
+        
+        // Create a ScrollTrigger to limit scrolling when "Our Loupes" reaches top left
+        // Final state: "Our Loupes" fully visible at top left
+        // Reduced scroll space by 100px - stop 100px earlier
+        ScrollTrigger.create({
+          trigger: titleSection || titleTextContainerRef.current,
+          start: 'top top+=100', // Stop 100px before "Our Loupes" section reaches the top
+          end: 'top top+=100',
+          pin: false,
+          onEnter: () => {
+            // Prevent further scrolling when trigger point is reached
+            lenis.stop()
+          },
+          onLeaveBack: () => {
+            lenis.start()
+          }
+        })
+      }
+    }
+
+    // Wait for DOM to be ready, then set scroll limit
+    setTimeout(setScrollLimit, 100)
+    window.addEventListener('resize', setScrollLimit)
+
+    // RAF loop for Lenis with ScrollTrigger integration
+    function raf(time: number) {
+      lenis.raf(time)
+      ScrollTrigger.update()
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+
+    // Link Lenis to ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update)
+
+    // Setup GSAP ScrollTrigger for 5-layer parallax effect (similar to Trona)
+    if (
+      layeredImageSectionRef.current &&
+      basexImageRef.current &&
+      basex1ImageRef.current &&
+      basex2ImageRef.current &&
+      basex3ImageRef.current &&
+      basex4ImageRef.current
+    ) {
+      // basex (background) - static or very slow movement
+      // Clamped to maximum: -11.8064px
+      gsap.to(basexImageRef.current, {
+        y: -12, // Clamped to maximum translation
+        ease: 'none',
+        scrollTrigger: {
+          trigger: layeredImageSectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 2.0,
+        },
+      })
+
+      // basex4 (bottom layer) - slowest parallax movement
+      // Clamped to maximum: -35.4192px
+      gsap.to(basex4ImageRef.current, {
+        y: -35, // Clamped to maximum translation
+        ease: 'none',
+        scrollTrigger: {
+          trigger: layeredImageSectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.8,
+        },
+      })
+
+      // base3.5x (middle-bottom layer) - moderate movement
+      // Clamped to maximum: -59.032px
+      gsap.to(basex3ImageRef.current, {
+        y: -59, // Clamped to maximum translation
+        ease: 'none',
+        scrollTrigger: {
+          trigger: layeredImageSectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      })
+
+      // basex2 (middle-top layer) - faster movement
+      // Clamped to maximum: -82.6448px
+      gsap.to(basex2ImageRef.current, {
+        y: -83, // Clamped to maximum translation
+        ease: 'none',
+        scrollTrigger: {
+          trigger: layeredImageSectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      })
+
+      // basex1 (top layer) - fastest movement
+      // Clamped to maximum: -106.258px
+      gsap.to(basex1ImageRef.current, {
+        y: -106, // Clamped to maximum translation
+        ease: 'none',
+        scrollTrigger: {
+          trigger: layeredImageSectionRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.0,
+        },
+      })
+
+      // Logo animation - translates up when scrolling
+      if (logoContainerRef.current) {
+        gsap.to(logoContainerRef.current, {
+          y: -200, // Increased from -100px for more movement
+          ease: 'none',
+          scrollTrigger: {
+            trigger: layeredImageSectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.2,
+          },
+        })
+      }
+
+    }
+
+    // ScrollReveal handles its own animation internally
+    
+    // Animate arrow being drawn
+    if (arrowRef.current && titleTextContainerRef.current) {
+      const arrow = arrowRef.current
+      const container = titleTextContainerRef.current
+      
+      // Get the total length of the arrow path
+      const pathLength = arrow.getTotalLength()
+      
+      // Set initial state - arrow is invisible (stroke-dasharray and stroke-dashoffset)
+      gsap.set(arrow, {
+        strokeDasharray: pathLength,
+        strokeDashoffset: pathLength,
+        opacity: 0
+      })
+      
+      // Animate arrow being drawn and fading in
+      gsap.to(arrow, {
+        strokeDashoffset: 0,
+        opacity: 1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: container,
+          start: 'top 85%',
+          end: 'top 65%',
+          scrub: 1.2,
+          onEnter: () => {
+            gsap.set(arrow, { strokeDashoffset: 0, opacity: 1 })
+          },
+          onLeave: () => {
+            gsap.set(arrow, { strokeDashoffset: 0, opacity: 1 })
+          },
+          onEnterBack: () => {
+            gsap.set(arrow, { strokeDashoffset: 0, opacity: 1 })
+          }
+        },
+      })
+    }
+
+    // Product cards - Grow in from below animation
+    if (productSectionRef.current && productCardRefs.current.length > 0) {
+      const section = productSectionRef.current
+      const cards = productCardRefs.current.filter(Boolean) as HTMLDivElement[]
+
+      cards.forEach((card, index) => {
+        if (!card) return
+
+        // Set initial state - start invisible, scaled down, and positioned below
+        gsap.set(card, {
+          opacity: 0,
+          scale: 0.3,
+          y: 100, // Start 100px below
+        })
+
+        // Calculate stagger - reduced delay for faster, smoother animation
+        const startOffset = index * 2 // 2% viewport offset for less delay
+
+        // Animate card growing in from below with smooth ease
+        gsap.to(card, {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: `top ${85 - startOffset}%`, // Staggered start points
+            end: `top ${70 - startOffset}%`,
+            scrub: 0.8, // Smoother, more responsive scroll-based animation
+            onEnter: () => {
+              // Keep visible after animation
+              if (index === cards.length - 1) {
+                cards.forEach(c => {
+                  if (c) gsap.set(c, { opacity: 1, scale: 1, y: 0 })
+                })
+              }
+            },
+            onLeave: () => {
+              // Keep visible when scrolling past
+              gsap.set(card, { opacity: 1, scale: 1, y: 0 })
+            },
+            onEnterBack: () => {
+              // Keep visible when scrolling back up
+              gsap.set(card, { opacity: 1, scale: 1, y: 0 })
+            }
+          },
+        })
+      })
+    }
+
+    // Animate product title texts - smooth scroll-based animation with Lenis
+    // Animations trigger when scrolling to the bottom of the page
+    if (productSectionRef.current && productTitleRefs.current.length > 0) {
+      const section = productSectionRef.current
+      const titles = productTitleRefs.current.filter(Boolean) as HTMLHeadingElement[]
+      const magnifications = productMagnificationRefs.current.filter(Boolean) as HTMLParagraphElement[]
+
+      titles.forEach((title, index) => {
+        if (!title) return
+
+        // Get the corresponding product card
+        const card = productCardRefs.current[index]
+        if (!card) return
+
+        // Set initial state - start invisible and slightly below
+        gsap.set(title, {
+          opacity: 0,
+          y: 30,
+        })
+
+        // Animate title appearing (fade in and slide up) - smooth scroll-based
+        gsap.to(title, {
+          opacity: 1,
+          y: 0,
+          ease: 'power2.out',
+          duration: 1,
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%', // Start when card is 85% down the viewport
+            end: 'top 50%', // Complete when card reaches 50% of viewport
+            scrub: 1, // Smooth scroll-based animation (lower = more responsive)
+            markers: false, // Set to true for debugging
+            onEnter: () => {
+              // Ensure it stays visible after animation
+              gsap.set(title, { opacity: 1, y: 0 })
+            },
+            onLeave: () => {
+              gsap.set(title, { opacity: 1, y: 0 })
+            },
+            onEnterBack: () => {
+              gsap.set(title, { opacity: 1, y: 0 })
+            }
+          },
+        })
+
+        // Animate magnification text (fade in and slide from left)
+        const magnification = magnifications[index]
+        if (magnification) {
+          gsap.set(magnification, {
+            opacity: 0,
+            x: -30,
+          })
+          
+          gsap.to(magnification, {
+            opacity: 1,
+            x: 0,
+            ease: 'power2.out',
+            duration: 1,
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              end: 'top 50%',
+              scrub: 1,
+              onEnter: () => {
+                gsap.set(magnification, { opacity: 1, x: 0 })
+              },
+              onLeave: () => {
+                gsap.set(magnification, { opacity: 1, x: 0 })
+              },
+              onEnterBack: () => {
+                gsap.set(magnification, { opacity: 1, x: 0 })
+              }
+            },
+          })
         }
       })
     }
 
-    // Use requestAnimationFrame for smoother animation
-    let rafId: number
-    const onScroll = () => {
-      if (rafId) cancelAnimationFrame(rafId)
-      rafId = requestAnimationFrame(handleScroll)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    handleScroll() // Initial call
-
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (rafId) cancelAnimationFrame(rafId)
-    }
-  }, [scrollProgress])
-
-  // Calculate scroll progress for the page (similar to homepage)
-  useEffect(() => {
-    const handleScroll = () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
+      window.removeEventListener('resize', setScrollLimit)
+      if (lenisRef.current) {
+        lenisRef.current.destroy()
       }
-
-      rafRef.current = requestAnimationFrame(() => {
-        if (!pageRef.current) return
-
-        const windowHeight = window.innerHeight
-        const scrollPosition = window.scrollY
-        const pageStart = pageRef.current.offsetTop
-        const pageHeight = pageRef.current.scrollHeight
-        const scrollableHeight = Math.max(pageHeight - windowHeight, windowHeight * (productImages.length - 0.5))
-
-        // Calculate progress (0 to ~productImages.length range)
-        // Each image gets a scroll range
-        const progress = scrollableHeight > 0 
-          ? Math.min(productImages.length, Math.max(0, ((scrollPosition - pageStart) / scrollableHeight) * productImages.length))
-          : 0
-        setScrollProgress(progress)
-      })
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial calculation
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
-      }
-    }
-  }, [productImages.length])
-
-  // Calculate transform for each image based on scrollProgress - same as homepage main image
-  const getImageTransform = (index: number) => {
-    // Each image has its own scroll progress range based on its position
-    // Image 0: progress 0-1, Image 1: progress 1-2, etc.
-    const imageProgress = scrollProgress - index
-
-    // Same logic as homepage getDeviceTransform: starts moving up after 30% scroll
-    if (imageProgress < 0.3) {
-      return { transform: 'translateY(0)', opacity: 1, translateY: 0, translateYValue: 0 }
-    }
-    
-    // Image moves up and fades out between 30% and 70% (same as homepage: 0.3 to 0.7)
-    if (imageProgress >= 0.3 && imageProgress < 0.7) {
-      const moveProgress = (imageProgress - 0.3) / 0.4 // 0 to 1
-      const translateY = -moveProgress * 120 // Move up 120vh (same as homepage)
-      const opacity = 1 - moveProgress
-      
-      return {
-        transform: `translateY(${translateY}vh)`,
-        opacity: Math.max(0, opacity),
-        translateY: translateY,
-        translateYValue: translateY
-      }
-    }
-    
-    // After 70% scroll, fully faded and moved up
-    return {
-      transform: `translateY(-120vh)`,
-      opacity: 0,
-      translateY: -120,
-      translateYValue: -120
-    }
-  }
-
-  const handleScrollDown = () => {
-    window.scrollBy({
-      top: window.innerHeight * 0.8,
-      behavior: 'smooth'
-    })
-  }
+  }, [])
 
   return (
     <>
       <Header />
       <main ref={pageRef} className={styles.productMenuPage}>
-        {/* LightRays Background */}
-        <div className={styles.lightRaysBackground}>
-          <LightRays
-            raysOrigin="top-center"
-            raysColor="#ffffff"
-            raysSpeed={1}
-            lightSpread={1}
-            rayLength={2}
-            pulsating={false}
-            fadeDistance={2}
-            saturation={1.0}
-            followMouse={true}
-            mouseInfluence={0.1}
-          />
-        </div>
-
-        {/* GradualBlur Component at Top - added by Ansh - github.com/ansh-dhanani */}
-        <GradualBlur
-          target="page"
-          position="top"
-          height="6rem"
-          strength={4.5}
-          divCount={10}
-          curve="bezier"
-          exponential={true}
-          opacity={1}
-        />
-
-        <div className={styles.menuContainer}>
-          {/* Text Overlay - Left Side */}
-          <div className={styles.productPageTextOverlay}>
-            <h1 className={styles.productPageHeadline}>
-              Clarity without compromise.
-            </h1>
-            <p className={styles.productPageSubheadline}>
-              Premium surgical loupes without the predatory price tag.
-            </p>
-            <div className={styles.logoContainer}>
-              <div className={styles.logoStack}>
+        {/* 3D Layered Images Section - Full Viewport */}
+        <section 
+          ref={layeredImageSectionRef}
+          className={styles.layeredImageSection}
+        >
+          <div className={styles.layeredImageContainer}>
+            {/* Tronaeast-style fade overlay - blends into background */}
+            <div className={styles.tronaeastFadeOverlay}></div>
+            
+            {/* basex - Main background image (lowest layer) */}
+            <div 
+              ref={basexImageRef}
+              className={styles.layeredImageLayer}
+              style={{ zIndex: 0 }}
+            >
+              <Image
+                src="/basex.png"
+                alt="Basex background"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            </div>
+            {/* basex4.5 - Bottom parallax layer */}
+            <div 
+              ref={basex4ImageRef}
+              className={styles.layeredImageLayer}
+              style={{ zIndex: 1 }}
+            >
+              <Image
+                src="/basex4.5.png"
+                alt="Basex4.5 layer"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            </div>
+            {/* base3.5x - Middle-bottom parallax layer */}
+            <div 
+              ref={basex3ImageRef}
+              className={styles.layeredImageLayer}
+              style={{ zIndex: 2 }}
+            >
+              <Image
+                src="/base3.5x.png"
+                alt="Base3.5x layer"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            </div>
+            {/* basex2 - Middle-top parallax layer */}
+            <div 
+              ref={basex2ImageRef}
+              className={styles.layeredImageLayer}
+              style={{ zIndex: 3 }}
+            >
+              <Image
+                src="/basex2.png"
+                alt="Basex2 layer"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            </div>
+            {/* basex1 - Top parallax layer (highest, most bottom of image visually) */}
+            <div 
+              ref={basex1ImageRef}
+              className={styles.layeredImageLayer}
+              style={{ zIndex: 4 }}
+            >
+              <Image
+                src="/basex1.png"
+                alt="Basex1 layer"
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+            </div>
+            
+            {/* HeliosX Logo Container - positioned above basex4, below basex2 layer */}
+            <div 
+              ref={logoContainerRef}
+              className={styles.logoInLayeredContainer}
+              style={{ zIndex: 2 }}
+            >
+              <div className={styles.upscaledLogoStack}>
                 <Image
-                  src="/LogoMinimal.png"
+                  src="/UpscaledLogoNew.png"
                   alt="HeliosX Logo"
-                  width={200}
-                  height={200}
-                  className={styles.logoImage}
+                  width={400}
+                  height={400}
+                  className={styles.upscaledLogoImage}
+                  quality={100}
                   style={{
                     width: 'auto',
                     height: '320px',
@@ -361,42 +659,73 @@ export default function ProductMenuPage() {
                 />
               </div>
             </div>
-          </div>
 
+            {/* Scroll Indicator Arrow - Bottom Center */}
+            <div 
+              ref={scrollArrowRef}
+              className={styles.scrollIndicatorArrow}
+              onClick={handleScrollArrowClick}
+            >
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        {/* Title Text Section - "Our Loupes" with ScrollReveal */}
+        <section className={styles.titleTextSection}>
+          <div className={styles.titleTextContainer} ref={titleTextContainerRef}>
+            <ScrollReveal
+              scrollContainerRef={null}
+              enableBlur={true}
+              baseOpacity={0.1}
+              baseRotation={3}
+              blurStrength={4}
+              containerClassName={styles.titleText}
+              textClassName={styles.titleTextContent}
+              rotationEnd="center center"
+              wordAnimationEnd="center center"
+            >
+              Our Loupes
+            </ScrollReveal>
+            {/* Animated Arrow */}
+            <svg className={styles.titleArrow} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                ref={arrowRef}
+                d="M12 4 L12 20 M8 16 L12 20 L16 16"
+                stroke="#111111"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            </svg>
+          </div>
+        </section>
+
+        {/* Product Cards Section */}
+        <div className={styles.menuContainer} ref={productSectionRef}>
           {/* Product Images Container */}
           <div className={styles.productImagesContainer}>
             {productImages.map((imageSrc, index) => {
-              const imageTransform = getImageTransform(index)
               const isHovered = hoveredIndex === index
               const isSelected = selectedIndex === index
-              
-              // Combine scroll transform with hover effect
-              let combinedTransform = imageTransform.transform
-              if (isHovered && !isSelected) {
-                const currentY = imageTransform.translateYValue || 0
-                // Use transform to add hover offset while preserving scroll position
-                combinedTransform = `translateY(${currentY}vh) translateY(-8px) scale(1.02)`
-              } else if (isSelected) {
-                const currentY = imageTransform.translateYValue || 0
-                combinedTransform = `translateY(${currentY}vh) scale(0.98)`
-              }
               
               return (
               <div
                 key={index}
-                ref={(el) => { imageRefs.current[index] = el }}
-                className={`${styles.productImageWrapper} ${isHovered ? styles.productImageWrapperHovered : ''} ${isSelected ? styles.productImageWrapperSelected : ''}`}
-                style={{
-                  transform: combinedTransform,
-                  opacity: imageTransform.opacity,
-                  transition: isSelected 
-                    ? 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease-out'
-                    : 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out'
+                ref={(el) => { 
+                  imageRefs.current[index] = el
+                  productCardRefs.current[index] = el
                 }}
+                className={`${styles.productImageWrapper} ${isHovered ? styles.productImageWrapperHovered : ''} ${isSelected ? styles.productImageWrapperSelected : ''}`}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 onClick={() => handleImageClick(index)}
               >
+                {/* Glow effect */}
+                <div className={styles.productImageGlow}></div>
                 <div className={`${styles.productImageFade} ${styles.productImageShadow}`}>
                   <div className={`${styles.productImageInner} ${styles.productImageDark} ${index === 0 ? styles.productImageBright : ''}`}>
                     <Image
@@ -422,17 +751,29 @@ export default function ProductMenuPage() {
                         patternAlpha={25}
                       />
                     </div>
+                    {/* Product Title Container */}
+                    <div className={styles.productTitleContainer}>
+                      <h1 
+                        ref={(el) => { productTitleRefs.current[index] = el }}
+                        className={styles.productTitle}
+                      >
+                        {productTitles[index]}
+                      </h1>
+                      <p 
+                        ref={(el) => { productMagnificationRefs.current[index] = el }}
+                        className={styles.productMagnificationText}
+                      >
+                        {productMagnifications[index]}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                {/* Animated Text Overlay - Right side for each product */}
+                {/* Text Overlay - Hidden for now */}
                 <div 
                   ref={(el) => { textOverlayRefs.current[index] = el }}
                   className={styles.productTextOverlay}
                   style={{
-                    right: index === 0 ? '-50rem' : 
-                           index === 1 ? '-40rem' : 
-                           index === 2 ? '-50rem' : 
-                           '-40rem'
+                    display: 'none'
                   }}
                 >
                   <div className={styles.productTextContent}>
@@ -453,49 +794,6 @@ export default function ProductMenuPage() {
           </div>
         </div>
 
-        {/* Scroll Down Indicator */}
-        <button 
-          className={styles.scrollIndicator}
-          onClick={handleScrollDown}
-          aria-label="Scroll down"
-        >
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-          <svg 
-            width="24" 
-            height="24" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-
-        {/* GradualBlur Component - added by Ansh - github.com/ansh-dhanani */}
-        <GradualBlur
-          target="page"
-          position="bottom"
-          height="6rem"
-          strength={4.5}
-          divCount={10}
-          curve="bezier"
-          exponential={true}
-          opacity={1}
-        />
       </main>
     </>
   )

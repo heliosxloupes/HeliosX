@@ -143,6 +143,21 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.heroImageLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transform: translateZ(0);
+  will-change: opacity;
+  backface-visibility: hidden;
 }
 
 .homeLogoContainer {
@@ -160,6 +175,12 @@
   padding: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   aspect-ratio: 1;
+}
+
+.homeLogoContainer img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 .imageTextOverlay {
@@ -258,8 +279,8 @@
   cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
-  border: 2px solid var(--gold-dark);
-  box-shadow: 0 8px 24px rgba(139, 105, 20, 0.2);
+  border: 3px solid #FF9B00; /* Orange border matching Order Now button */
+  box-shadow: 0 8px 24px rgba(255, 155, 0, 0.2);
   transition: opacity 0.15s ease-out, transform 0.15s ease-out, box-shadow 0.3s ease;
   will-change: transform, opacity;
 }
@@ -426,13 +447,22 @@
 
 .textContainer {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   max-width: 90vw;
   text-align: center;
   line-height: 1.4;
+  gap: 0.5rem;
+}
+
+.textLine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .wordWrapper {
@@ -445,7 +475,7 @@
 }
 
 .textWord {
-  font-size: clamp(2rem, 6vw, 5rem);
+  font-size: clamp(1.5rem, 4.5vw, 3.75rem);
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: 0.01em;
@@ -524,6 +554,22 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.device2Video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .device2TextOverlay {
@@ -626,7 +672,7 @@
 
 .imagesContainer {
   position: fixed;
-  top: 35%; /* Moved up more from 40% */
+  top: 30%; /* Moved up slightly from 35% */
   left: -4rem; /* Moved more to the left */
   width: 300vw; /* 3x viewport width for 3 images side by side */
   height: 500px;
@@ -634,10 +680,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.5rem; /* Minimal spacing between images */
+  gap: 3rem; /* Increased spacing between images from 0.5rem */
   z-index: 1;
   will-change: transform;
   transform: translateY(-50%);
+  margin-top: 8rem; /* Add spacing between video section and images section */
 }
 
 .imageCardWrapper {
@@ -658,6 +705,9 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .imageCardInner {
@@ -666,6 +716,9 @@
   height: 100%;
   border-radius: 16px;
   overflow: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .imageNoiseOverlay {
@@ -697,7 +750,7 @@
 
 .bottomLargeText {
   position: fixed;
-  bottom: 4rem;
+  bottom: 1rem; /* Moved down from 4rem */
   left: calc(50vw - 720px - 4.25rem); /* Aligned with start of first image (accounting for container left offset) */
   z-index: 5;
   will-change: transform, opacity;
@@ -757,6 +810,86 @@
   margin: 1rem 0 0 0;
   letter-spacing: 0.01em;
   font-style: normal;
+}
+
+.blonddirectContainer {
+  position: fixed;
+  top: 100%; /* Moved up slightly from 110% */
+  /* Position to the right of image3RightText with spacing */
+  left: calc(50vw + 1440px + 24rem + 400px + 4rem);
+  width: calc((100vw - 6rem) * 0.525); /* Reduced by 30% from 0.75 (0.75 * 0.7 = 0.525) */
+  height: 100vh; /* Full viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  will-change: transform, opacity;
+}
+
+.blonddirectImageWrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 4rem);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.blonddirectTextOverlay {
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+  z-index: 15;
+  max-width: 600px;
+  pointer-events: none;
+}
+
+.blonddirectText {
+  font-family: var(--font-serif, 'Georgia', serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.blonddirectText > div {
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+}
+
+.blonddirectNoise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: overlay;
+}
+
+.blonddirectNoise :global(.noise-overlay) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .directblondImage {
@@ -1118,9 +1251,9 @@
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 2rem;
   position: relative;
-  max-width: 280px;
+  max-width: 360px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   transform: translateZ(0) scale(1);
@@ -1177,15 +1310,15 @@
 
 .bottomNewsletterTitle {
   font-family: var(--font-system);
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
   color: #FFFFFF;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.75rem 0;
 }
 
 .bottomNewsletterText {
   font-family: var(--font-system);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: #FFFFFF;
   margin: 0;
@@ -1202,7 +1335,7 @@
   position: absolute;
   right: calc(100% + 0.5rem);
   top: 0;
-  width: 280px;
+  width: 360px;
   z-index: 10;
   background: rgba(0, 0, 0, 0.95);
   border: 1px solid rgba(255, 155, 0, 0.3);
@@ -1227,10 +1360,10 @@
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
-  padding: 0.75rem;
+  padding: 1rem;
   color: #FFFFFF;
   font-family: var(--font-system);
-  font-size: 14px;
+  font-size: 16px;
   width: 100%;
   transition: all 0.2s ease;
 }
@@ -1250,9 +1383,9 @@
   color: #000000;
   border: none;
   border-radius: 6px;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   font-family: var(--font-system);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1267,7 +1400,7 @@
 }
 
 .stockStatusFixed {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: #d1d1d1; /* Light gray text */
   margin: 0;
   text-align: center;
@@ -1282,13 +1415,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem 3rem;
+  padding: 1.5rem 4rem;
   border-radius: 12px; /* Less rounded, more rectangular */
   background: #FF9B00; /* Orange */
   color: #000000; /* Dark/black text */
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.25rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
@@ -1298,7 +1431,7 @@
   border: none;
   position: relative;
   overflow: hidden;
-  min-width: 280px;
+  min-width: 360px;
   width: 100%;
 }
 

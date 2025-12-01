@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import Lenis from 'lenis'
 import Noise from '../Noise'
 import MagicBento, { BentoCardProps } from '../MagicBento'
 import BlurText from '../BlurText'
@@ -11,8 +12,10 @@ import styles from './Hero.module.css'
 
 export default function Hero() {
   const [scrollProgress, setScrollProgress] = useState(0)
-  const [firstTextWords, setFirstTextWords] = useState<string[]>([])
-  const [secondTextWords, setSecondTextWords] = useState<string[]>([])
+  const [firstTextWordsLine1, setFirstTextWordsLine1] = useState<string[]>([])
+  const [firstTextWordsLine2, setFirstTextWordsLine2] = useState<string[]>([])
+  const [secondTextWordsLine1, setSecondTextWordsLine1] = useState<string[]>([])
+  const [secondTextWordsLine2, setSecondTextWordsLine2] = useState<string[]>([])
   const [showSecondText, setShowSecondText] = useState(false)
   const [showDevice2, setShowDevice2] = useState(false)
   const [showImageGrid, setShowImageGrid] = useState(false)
@@ -25,11 +28,15 @@ export default function Hero() {
   const secondTextRef = useRef<HTMLDivElement>(null)
   const modalVideoRef = useRef<HTMLVideoElement>(null)
 
-  const firstText = "Born in the operating room, built to defy industry greed—HeliosX makes surgical precision accessible to all."
-  const secondText = "Introducing HeliosX- a new standard in surgical optics—engineered for performance, priced for reality."
+  const firstTextLine1 = "Born in the operating room, built to defy industry Greed —"
+  const firstTextLine2 = "HeliosX makes surgical precision accessible to all."
+  const secondTextLine1 = "Introducing HeliosX — a new standard in surgical optics"
+  const secondTextLine2 = "Engineered for performance, priced for reality."
   
-  const firstWords = firstText.split(' ')
-  const secondWords = secondText.split(' ')
+  const firstWordsLine1 = firstTextLine1.split(' ')
+  const firstWordsLine2 = firstTextLine2.split(' ')
+  const secondWordsLine1 = secondTextLine1.split(' ')
+  const secondWordsLine2 = secondTextLine2.split(' ')
 
   // Magic Bento cards for Dive Deeper section
   const diveDeeperCards: BentoCardProps[] = [
@@ -127,88 +134,130 @@ export default function Hero() {
   ]
 
   useEffect(() => {
-    let rafId: number | null = null
-    
-    const handleScroll = () => {
-      if (rafId) return // Skip if already scheduled
+    if (!heroRef.current) return
+
+    // Create Lenis instance for scroll-based animations
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
+    })
+
+    const handleLenisScroll = ({ scroll, limit }: { scroll: number; limit: number }) => {
+      if (!heroRef.current) return
+
+      const rect = heroRef.current.getBoundingClientRect()
+      const windowHeight = window.innerHeight
+      const heroHeight = rect.height
       
-      rafId = requestAnimationFrame(() => {
-        if (!heroRef.current) {
-          rafId = null
-          return
+      // Calculate scroll progress (0 to 1.6 - includes 5 circles + dive deeper section)
+      // Progress increases as we scroll through the hero section
+      const scrollPosition = scroll
+      const heroStart = heroRef.current.offsetTop
+      const scrollableHeight = heroHeight - windowHeight
+      
+      // Normalize progress so that when we reach the end of scrollable area, progress = 1.6
+      // Progress 1.0-1.5: circles panning, 1.5-1.6: dive deeper section slides in (fast transition)
+      const progress = scrollableHeight > 0 
+        ? Math.min(1.6, Math.max(0, ((scrollPosition - heroStart) / scrollableHeight) * 1.6))
+        : 0
+      setScrollProgress(progress)
+
+      // First text: appears word by word from 0.4 to 0.6
+      // Line 1 appears first, then line 2
+      if (progress >= 0.4 && progress <= 0.6) {
+        const wordProgress = (progress - 0.4) / 0.2 // 0 to 1
+        const totalWords = firstWordsLine1.length + firstWordsLine2.length
+        const wordIndex = Math.floor(wordProgress * totalWords)
+        
+        // Show line 1 words first
+        if (wordIndex < firstWordsLine1.length) {
+          const visibleWordsLine1 = firstWordsLine1.slice(0, wordIndex + 1)
+          setFirstTextWordsLine1(visibleWordsLine1)
+          setFirstTextWordsLine2([])
+        } else {
+          // Show all of line 1, then start showing line 2
+          setFirstTextWordsLine1(firstWordsLine1)
+          const line2WordIndex = wordIndex - firstWordsLine1.length
+          const visibleWordsLine2 = firstWordsLine2.slice(0, Math.min(line2WordIndex + 1, firstWordsLine2.length))
+          setFirstTextWordsLine2(visibleWordsLine2)
         }
-
-        const rect = heroRef.current.getBoundingClientRect()
-        const windowHeight = window.innerHeight
-        const heroHeight = rect.height
+        setShowSecondText(false)
+      } else if (progress > 0.6 && progress <= 0.82) {
+        // Extended transition period - keep first text visible
+        // Allow "accessible to all" to fully transform red (0.6-0.69)
+        // Then hold for additional scroll time (0.69-0.82) before transitioning
+        setFirstTextWordsLine1(firstWordsLine1)
+        setFirstTextWordsLine2(firstWordsLine2)
+        setShowSecondText(false)
+      } else if (progress > 0.82 && progress <= 0.95) {
+        // Second text: appears word by word from 0.82 to 0.95 (slower animation, more delayed start)
+        setFirstTextWordsLine1([])
+        setFirstTextWordsLine2([])
+        setShowSecondText(true)
+        const wordProgress = (progress - 0.82) / 0.13 // 0 to 1 (slower animation over 0.13 scroll progress)
+        const totalWords = secondWordsLine1.length + secondWordsLine2.length
+        const wordIndex = Math.floor(wordProgress * totalWords)
         
-        // Calculate scroll progress (0 to 1.6 - includes 5 circles + dive deeper section)
-        // Progress increases as we scroll through the hero section
-        const scrollPosition = window.scrollY
-        const heroStart = heroRef.current.offsetTop
-        const scrollableHeight = heroHeight - windowHeight
-        
-        // Normalize progress so that when we reach the end of scrollable area, progress = 1.6
-        // Progress 1.0-1.5: circles panning, 1.5-1.6: dive deeper section slides in (fast transition)
-        const progress = scrollableHeight > 0 
-          ? Math.min(1.6, Math.max(0, ((scrollPosition - heroStart) / scrollableHeight) * 1.6))
-          : 0
-        setScrollProgress(progress)
-
-        // First text: appears word by word from 0.4 to 0.6
-        if (progress >= 0.4 && progress <= 0.6) {
-          const wordProgress = (progress - 0.4) / 0.2 // 0 to 1
-          const wordIndex = Math.floor(wordProgress * firstWords.length)
-          const visibleWords = firstWords.slice(0, Math.min(wordIndex + 1, firstWords.length))
-          setFirstTextWords(visibleWords)
-          setShowSecondText(false)
-        } else if (progress > 0.6 && progress <= 0.82) {
-          // Extended transition period - keep first text visible
-          // Allow "accessible to all" to fully transform red (0.6-0.69)
-          // Then hold for additional scroll time (0.69-0.82) before transitioning
-          setFirstTextWords(firstWords)
-          setShowSecondText(false)
-        } else if (progress > 0.82 && progress <= 0.95) {
-          // Second text: appears word by word from 0.82 to 0.95 (slower animation, more delayed start)
-          setFirstTextWords([])
-          setShowSecondText(true)
-          const wordProgress = (progress - 0.82) / 0.13 // 0 to 1 (slower animation over 0.13 scroll progress)
-          const wordIndex = Math.floor(wordProgress * secondWords.length)
-          const visibleWords = secondWords.slice(0, Math.min(wordIndex + 1, secondWords.length))
-          setSecondTextWords(visibleWords)
-        } else if (progress > 0.95 && progress <= 1.05) {
-          // Show all second text, then transition to device2
-          setSecondTextWords(secondWords)
-          setShowDevice2(false)
-        } else if (progress > 1.05 && progress <= 1.15) {
-          // Device2 appears and moves in
-          setSecondTextWords([])
-          setShowSecondText(false)
-          setShowDevice2(true)
+        // Show line 1 words first
+        if (wordIndex < secondWordsLine1.length) {
+          const visibleWordsLine1 = secondWordsLine1.slice(0, wordIndex + 1)
+          setSecondTextWordsLine1(visibleWordsLine1)
+          setSecondTextWordsLine2([])
+        } else {
+          // Show all of line 1, then start showing line 2
+          setSecondTextWordsLine1(secondWordsLine1)
+          const line2WordIndex = wordIndex - secondWordsLine1.length
+          const visibleWordsLine2 = secondWordsLine2.slice(0, Math.min(line2WordIndex + 1, secondWordsLine2.length))
+          setSecondTextWordsLine2(visibleWordsLine2)
+        }
+      } else if (progress > 0.95 && progress <= 1.05) {
+        // Show all second text, then transition to device2
+        setSecondTextWordsLine1(secondWordsLine1)
+        setSecondTextWordsLine2(secondWordsLine2)
+        setShowDevice2(false)
+      } else if (progress > 1.05 && progress <= 1.15) {
+        // Device2 appears and moves in
+        setSecondTextWordsLine1([])
+        setSecondTextWordsLine2([])
+        setShowSecondText(false)
+        setShowDevice2(true)
         } else {
           // Before 40% or after 1.15
           if (progress < 0.4 || progress > 1.15) {
-            setFirstTextWords([])
-            setSecondTextWords([])
+            setFirstTextWordsLine1([])
+            setFirstTextWordsLine2([])
+            setSecondTextWordsLine1([])
+            setSecondTextWordsLine2([])
             setShowSecondText(false)
           }
-          if (progress < 1.05) {
-            setShowDevice2(false)
-          }
+        if (progress < 1.05) {
+          setShowDevice2(false)
         }
-        
-        rafId = null
-      })
+      }
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial call
+    // Listen to Lenis scroll events
+    lenis.on('scroll', handleLenisScroll)
+
+    // Initial call
+    handleLenisScroll({ scroll: lenis.scroll, limit: lenis.limit })
+
+    // RAF loop for Lenis
+    function raf(time: number) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (rafId) {
-        cancelAnimationFrame(rafId)
-      }
+      lenis.off('scroll', handleLenisScroll)
+      lenis.destroy()
     }
   }, [])
 
@@ -384,20 +433,46 @@ export default function Hero() {
         }}
       >
         <div className={styles.deviceScreen}>
-          <Image
-            src="/Homepage1NEW.jpg"
-            alt="Woman surgeon"
-            fill
-            style={{ objectFit: 'cover' }}
-            priority
-          />
+          {/* First Image - Fades out as you scroll */}
+          <div 
+            className={styles.heroImageLayer}
+            style={{
+              opacity: Math.max(0, Math.min(1, 1 - ((scrollProgress - 0.1) / 0.3))), // Fade out between 0.1-0.4 scroll progress
+              transition: 'opacity 0.15s ease-out'
+            }}
+          >
+            <Image
+              src="/Homepage1NEW.jpg"
+              alt="Woman surgeon"
+              fill
+              style={{ objectFit: 'cover' }}
+              priority
+            />
+          </div>
+          {/* Second Image - Fades in as you scroll */}
+          <div 
+            className={styles.heroImageLayer}
+            style={{
+              opacity: Math.max(0, Math.min(1, (scrollProgress - 0.1) / 0.3)), // Fade in between 0.1-0.4 scroll progress
+              transition: 'opacity 0.15s ease-out',
+              zIndex: 2
+            }}
+          >
+            <Image
+              src="/Homepage1NEW(edit).jpg"
+              alt="Homepage1NEW"
+              fill
+              style={{ objectFit: 'cover' }}
+              priority
+            />
+          </div>
           {/* Logo - Top Left */}
           <div className={styles.homeLogoContainer}>
             <Image
               src="/logominimalnowriting.png"
               alt="HeliosX Logo"
-              width={60}
-              height={60}
+              width={40}
+              height={40}
               style={{ objectFit: 'contain' }}
             />
           </div>
@@ -515,7 +590,7 @@ export default function Hero() {
       )}
 
 
-      {/* First Text - Word by word animation */}
+      {/* First Text - Two lines, word by word animation */}
       <div 
         ref={firstTextRef}
         className={styles.animatedText}
@@ -526,44 +601,77 @@ export default function Hero() {
         }}
       >
         <div className={styles.textContainer}>
-          {firstWords.map((word, index) => {
-            const isVisible = firstTextWords.length > index
-            // "accessible to all" are the last 3 words (indices: length-3, length-2, length-1)
-            const isAccessibleToAll = index >= firstWords.length - 3
-            // Calculate which word in the sequence (0 = "accessible", 1 = "to", 2 = "all")
-            const wordPositionInSequence = isAccessibleToAll ? (index - (firstWords.length - 3)) : -1
-            // Transform to red progressively from left to right when scroll reaches end of first text animation
-            // Start at 0.6, each word transitions over 0.03 scroll progress (staggered)
-            const redTransitionStart = 0.6
-            const redTransitionDelay = 0.03 // Delay between each word turning red
-            const wordRedStart = redTransitionStart + (wordPositionInSequence * redTransitionDelay)
-            const shouldBeRed = isAccessibleToAll && scrollProgress >= wordRedStart
-            return (
-              <span
-                key={`first-${index}`}
-                className={styles.wordWrapper}
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
-                  transition: `opacity 0.4s ease-out ${index * 0.03}s, transform 0.4s ease-out ${index * 0.03}s, color 0.5s ease-in-out`
-                }}
-              >
-                <span 
-                  className={styles.textWord}
+          {/* Line 1 */}
+          <div className={styles.textLine}>
+            {firstWordsLine1.map((word, index) => {
+              const isVisible = firstTextWordsLine1.length > index
+              return (
+                <span
+                  key={`first-line1-${index}`}
+                  className={styles.wordWrapper}
                   style={{
-                    color: shouldBeRed ? '#dc2626' : undefined, // Red color when animation completes
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                    transition: `opacity 0.4s ease-out ${index * 0.03}s, transform 0.4s ease-out ${index * 0.03}s`
                   }}
                 >
-                  {word}
+                  <span className={styles.textWord}>
+                    {word}
+                  </span>
+                  {index < firstWordsLine1.length - 1 && '\u00A0'}
                 </span>
-                {index < firstWords.length - 1 && '\u00A0'}
-              </span>
-            )
-          })}
+              )
+            })}
+          </div>
+          {/* Line 2 */}
+          <div className={styles.textLine}>
+            {firstWordsLine2.map((word, index) => {
+              const isVisible = firstTextWordsLine2.length > index
+              // "HeliosX" is the first word (index 0)
+              const isHeliosX = index === 0
+              // "accessible to all" are the last 3 words (indices: length-3, length-2, length-1)
+              const isAccessibleToAll = index >= firstWordsLine2.length - 3
+              // Calculate which word in the sequence (0 = "accessible", 1 = "to", 2 = "all")
+              const wordPositionInSequence = isAccessibleToAll ? (index - (firstWordsLine2.length - 3)) : -1
+              // Transform to orange for "HeliosX" progressively when scroll reaches 0.6
+              const orangeTransitionStart = 0.6
+              const shouldBeOrange = isHeliosX && scrollProgress >= orangeTransitionStart
+              // Transform to red progressively from left to right when scroll reaches end of first text animation
+              // Start at 0.6, each word transitions over 0.03 scroll progress (staggered)
+              const redTransitionStart = 0.6
+              const redTransitionDelay = 0.03 // Delay between each word turning red
+              const wordRedStart = redTransitionStart + (wordPositionInSequence * redTransitionDelay)
+              const shouldBeRed = isAccessibleToAll && scrollProgress >= wordRedStart
+              // Calculate delay based on line 1 completion + line 2 index
+              const line1Delay = firstWordsLine1.length * 0.03
+              const line2Delay = index * 0.03
+              return (
+                <span
+                  key={`first-line2-${index}`}
+                  className={styles.wordWrapper}
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                    transition: `opacity 0.4s ease-out ${line1Delay + line2Delay}s, transform 0.4s ease-out ${line1Delay + line2Delay}s, color 0.5s ease-in-out`
+                  }}
+                >
+                  <span 
+                    className={styles.textWord}
+                    style={{
+                      color: shouldBeOrange ? '#FF9B00' : shouldBeRed ? '#dc2626' : undefined, // Orange for HeliosX, red for accessible to all
+                    }}
+                  >
+                    {word}
+                  </span>
+                  {index < firstWordsLine2.length - 1 && '\u00A0'}
+                </span>
+              )
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Second Text - Word by word animation */}
+      {/* Second Text - Two lines, word by word animation */}
       <div 
         ref={secondTextRef}
         className={styles.animatedText}
@@ -574,25 +682,63 @@ export default function Hero() {
         }}
       >
         <div className={styles.textContainer}>
-          {secondWords.map((word, index) => {
-            const isVisible = secondTextWords.length > index
-            return (
-              <span
-                key={`second-${index}`}
-                className={styles.wordWrapper}
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
-                  transition: `opacity 0.4s ease-out ${index * 0.03}s, transform 0.4s ease-out ${index * 0.03}s`
-                }}
-              >
-                <span className={styles.textWord}>
-                  {word}
+          {/* Line 1 */}
+          <div className={styles.textLine}>
+            {secondWordsLine1.map((word, index) => {
+              const isVisible = secondTextWordsLine1.length > index
+              // "HeliosX" is the second word (index 1, after "Introducing")
+              const isHeliosX = index === 1
+              // Transform to orange for "HeliosX" progressively when scroll reaches 0.82 (when second text starts)
+              const orangeTransitionStart = 0.82
+              const shouldBeOrange = isHeliosX && scrollProgress >= orangeTransitionStart
+              return (
+                <span
+                  key={`second-line1-${index}`}
+                  className={styles.wordWrapper}
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                    transition: `opacity 0.4s ease-out ${index * 0.03}s, transform 0.4s ease-out ${index * 0.03}s, color 0.5s ease-in-out`
+                  }}
+                >
+                  <span 
+                    className={styles.textWord}
+                    style={{
+                      color: shouldBeOrange ? '#FF9B00' : undefined, // Orange color for HeliosX
+                    }}
+                  >
+                    {word}
+                  </span>
+                  {index < secondWordsLine1.length - 1 && '\u00A0'}
                 </span>
-                {index < secondWords.length - 1 && '\u00A0'}
-              </span>
-            )
-          })}
+              )
+            })}
+          </div>
+          {/* Line 2 */}
+          <div className={styles.textLine}>
+            {secondWordsLine2.map((word, index) => {
+              const isVisible = secondTextWordsLine2.length > index
+              // Calculate delay based on line 1 completion + line 2 index
+              const line1Delay = secondWordsLine1.length * 0.03
+              const line2Delay = index * 0.03
+              return (
+                <span
+                  key={`second-line2-${index}`}
+                  className={styles.wordWrapper}
+                  style={{
+                    opacity: isVisible ? 1 : 0,
+                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
+                    transition: `opacity 0.4s ease-out ${line1Delay + line2Delay}s, transform 0.4s ease-out ${line1Delay + line2Delay}s`
+                  }}
+                >
+                  <span className={styles.textWord}>
+                    {word}
+                  </span>
+                  {index < secondWordsLine2.length - 1 && '\u00A0'}
+                </span>
+              )
+            })}
+          </div>
         </div>
       </div>
 
@@ -607,12 +753,21 @@ export default function Hero() {
           }}
         >
           <div className={styles.device2Screen}>
-            <Image
-              src="/TeamworkNew.png"
-              alt="Teamwork"
-              fill
-              style={{ objectFit: 'cover' }}
-              priority
+            <video
+              src="/Mainpagevideo2.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={styles.device2Video}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                position: 'absolute',
+                top: 0,
+                left: 0
+              }}
             />
             {/* Text overlay at bottom left */}
             <div className={styles.device2TextOverlay}>
@@ -759,7 +914,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Large text at bottom aligned with first image */}
+      {/* Large text at bottom centered */}
       <div 
         className={styles.bottomLargeText}
         style={{
@@ -784,30 +939,32 @@ export default function Hero() {
         <p className={styles.image3SubText}>Elite quality made truly affordable</p>
       </div>
 
-      {/* Directblond image to the right of the text */}
+      {/* Blonddirect image container - separate container similar to imagesContainer */}
       <div 
-        className={styles.directblondImage}
+        className={styles.blonddirectContainer}
         style={{
           opacity: circlesContainerTransform.opacity,
-          transform: circlesContainerTransform.transform || 'translateY(-50%)',
+          transform: circlesContainerTransform.transform 
+            ? `${circlesContainerTransform.transform} translateY(-50%)`
+            : 'translateY(-50%)',
           transition: 'transform 0.2s ease-out, opacity 0.2s ease-out'
         }}
       >
-        <div className={styles.directblondImageInner}>
+        <div className={styles.blonddirectImageWrapper}>
           <Image
             src="/Galileo/BlonddirectNew.png"
             alt="Blond direct"
             fill
-            style={{ objectFit: 'contain', borderRadius: '16px' }}
+            style={{ objectFit: 'cover' }}
           />
           {/* Text overlay at top left */}
-          <div className={styles.directblondTextOverlay}>
-            <div className={styles.directblondText}>
+          <div className={styles.blonddirectTextOverlay}>
+            <div className={styles.blonddirectText}>
               <div>"Skill thrives where</div>
               <div style={{ paddingLeft: '2rem' }}>Access - Exists"</div>
             </div>
           </div>
-          <div className={styles.directblondImageNoise}>
+          <div className={styles.blonddirectNoise}>
             <Noise 
               patternSize={250}
               patternScaleX={1}
@@ -818,6 +975,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+
 
       {/* Placeholder circle with 1 to the right of blonddirect */}
       <div 
