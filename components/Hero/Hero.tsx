@@ -754,7 +754,7 @@ export default function Hero() {
         >
           <div className={styles.device2Screen}>
             <video
-              src="/Mainpagevideo2.mp4"
+              src="/mainpagevideo2.mp4"
               autoPlay
               loop
               muted
