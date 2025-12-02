@@ -140,16 +140,29 @@ function CartContent() {
               </div>
               {/* Steps overlay on right side */}
               <div className={styles.stepsOverlay}>
-                <Link href={buildCheckoutQuery()} className={styles.stepItemClickable}>
-                  <div className={styles.stepIcon}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="9" cy="21" r="1"/>
-                      <circle cx="20" cy="21" r="1"/>
-                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                    </svg>
+                {cartItems.length > 0 ? (
+                  <Link href={buildCheckoutQuery()} className={styles.stepItemClickable}>
+                    <div className={styles.stepIcon}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                      </svg>
+                    </div>
+                    <div className={styles.stepText}>Check Out</div>
+                  </Link>
+                ) : (
+                  <div className={styles.stepItemDisabled}>
+                    <div className={styles.stepIcon}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.4">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                      </svg>
+                    </div>
+                    <div className={styles.stepText} style={{ opacity: 0.4 }}>Check Out</div>
                   </div>
-                  <div className={styles.stepText}>Check Out</div>
-                </Link>
+                )}
                 <div className={styles.stepArrow}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"/>
