@@ -13,6 +13,12 @@ const productIdMap: Record<string, string> = {
   'newton': 'prod_TRvCAmr84ybszC',
 }
 
+// Add-on product IDs
+const ADDON_PRODUCT_IDS = {
+  prescriptionLenses: 'prod_TX171vMUMm8Rgd',
+  extendedWarranty: 'prod_TX17JE6jXQ4OOJ',
+}
+
 // Product price mapping (in cents)
 const productPriceMap: Record<string, number> = {
   'galileo': 49900, // $499.00
@@ -45,18 +51,20 @@ export async function POST(req: NextRequest) {
     const baseUrl = req.nextUrl.origin
 
     // If cartItems is provided, use it; otherwise fall back to single product
-    let itemsToProcess: Array<{ productSlug: string; quantity: number; price: number; stripeProductId?: string | null; selectedMagnification?: string | null }> = []
+    let itemsToProcess: Array<{ productSlug: string; quantity: number; price: number; stripeProductId?: string | null; selectedMagnification?: string | null; hasPrescriptionLenses?: boolean; hasExtendedWarranty?: boolean }> = []
     
     if (cartItems && Array.isArray(cartItems) && cartItems.length > 0) {
       console.log('Processing cart items:', cartItems.length)
       itemsToProcess = cartItems.map((item: any) => {
-        console.log('Cart item:', item.productSlug, item.quantity, item.stripeProductId, item.selectedMagnification)
+        console.log('Cart item:', item.productSlug, item.quantity, item.stripeProductId, item.selectedMagnification, item.hasPrescriptionLenses, item.hasExtendedWarranty)
         return {
           productSlug: item.productSlug,
           quantity: item.quantity,
           price: item.price,
           stripeProductId: item.stripeProductId || null,
           selectedMagnification: item.selectedMagnification || null,
+          hasPrescriptionLenses: item.hasPrescriptionLenses || false,
+          hasExtendedWarranty: item.hasExtendedWarranty || false,
         }
       })
       console.log('Items to process:', itemsToProcess.length)
@@ -67,6 +75,8 @@ export async function POST(req: NextRequest) {
         price: productPriceMap[productSlug] / 100, // Convert from cents
         stripeProductId: null,
         selectedMagnification: null,
+        hasPrescriptionLenses: false,
+        hasExtendedWarranty: false,
       }]
     } else {
       return NextResponse.json(
@@ -201,6 +211,56 @@ export async function POST(req: NextRequest) {
       } else {
         console.warn(`⚠⚠⚠ SKIPPING magnification: stripeProductId="${item.stripeProductId}", selectedMagnification="${item.selectedMagnification}"`)
         console.warn(`   Reason: Condition failed - both values must be truthy`)
+      }
+      
+      // 3. Add Prescription Lenses add-on if selected
+      if (item.hasPrescriptionLenses) {
+        console.log(`✓ Processing Prescription Lenses add-on`)
+        try {
+          const prescriptionProduct = await stripe.products.retrieve(ADDON_PRODUCT_IDS.prescriptionLenses)
+          const prescriptionPrices = await stripe.prices.list({
+            product: ADDON_PRODUCT_IDS.prescriptionLenses,
+            active: true,
+            limit: 1,
+          })
+          
+          if (prescriptionPrices.data.length > 0) {
+            lineItems.push({
+              price: prescriptionPrices.data[0].id,
+              quantity: item.quantity,
+            })
+            console.log(`✓ Added Prescription Lenses: ${prescriptionProduct.name} (Price ID: ${prescriptionPrices.data[0].id})`)
+          } else {
+            console.warn(`⚠ No active price found for Prescription Lenses product`)
+          }
+        } catch (error: any) {
+          console.error(`❌ ERROR retrieving Prescription Lenses product:`, error.message)
+        }
+      }
+      
+      // 4. Add Extended Warranty add-on if selected
+      if (item.hasExtendedWarranty) {
+        console.log(`✓ Processing Extended Warranty add-on`)
+        try {
+          const warrantyProduct = await stripe.products.retrieve(ADDON_PRODUCT_IDS.extendedWarranty)
+          const warrantyPrices = await stripe.prices.list({
+            product: ADDON_PRODUCT_IDS.extendedWarranty,
+            active: true,
+            limit: 1,
+          })
+          
+          if (warrantyPrices.data.length > 0) {
+            lineItems.push({
+              price: warrantyPrices.data[0].id,
+              quantity: item.quantity,
+            })
+            console.log(`✓ Added Extended Warranty: ${warrantyProduct.name} (Price ID: ${warrantyPrices.data[0].id})`)
+          } else {
+            console.warn(`⚠ No active price found for Extended Warranty product`)
+          }
+        } catch (error: any) {
+          console.error(`❌ ERROR retrieving Extended Warranty product:`, error.message)
+        }
       }
     }
 

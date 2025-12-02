@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Header from '@/components/Header'
 import Image from 'next/image'
 import Noise from '@/components/Noise'
-import { getCart, updateCartItemQuantity, removeFromCart, getCartTotal, getCartItemCount, type CartItem } from '@/lib/cart'
+import { getCart, updateCartItemQuantity, removeFromCart, getCartTotal, getCartItemCount, updateCartAddOns, type CartItem } from '@/lib/cart'
 import styles from './Cart.module.css'
 
 function CartContent() {
@@ -17,6 +17,18 @@ function CartContent() {
     cleaningKit: 0,
     warranty: 0,
   })
+
+  // Update add-ons when cart items change
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      const firstItem = cartItems[0]
+      setAddOns({
+        case: firstItem.hasPrescriptionLenses ? 1 : 0,
+        cleaningKit: 0,
+        warranty: firstItem.hasExtendedWarranty ? 1 : 0,
+      })
+    }
+  }, [cartItems])
 
   // Load cart from localStorage
   useEffect(() => {
@@ -37,21 +49,12 @@ function CartContent() {
   const addOnProducts = [
     {
       id: 'case',
-      name: 'Protective Case',
-      description: 'Durable case to protect your loupes and keep them safe during transport.',
-      price: 59,
+      name: 'Prescription Lenses',
+      description: 'Custom prescription lenses tailored to your vision needs. Provide your prescription details after check out via email form.',
+      price: 129,
       quantity: addOns.case,
       setQuantity: (qty: number) => setAddOns({ ...addOns, case: qty }),
-      image: '/loupesondesk2.png',
-    },
-    {
-      id: 'cleaningKit',
-      name: 'Cleaning Kit',
-      description: 'Professional cleaning supplies to keep your loupes crystal clear.',
-      price: 39,
-      quantity: addOns.cleaningKit,
-      setQuantity: (qty: number) => setAddOns({ ...addOns, cleaningKit: qty }),
-      image: '/loupesondesk2.png',
+      image: '/prescription.png',
     },
     {
       id: 'warranty',
@@ -60,7 +63,16 @@ function CartContent() {
       price: 79,
       quantity: addOns.warranty,
       setQuantity: (qty: number) => setAddOns({ ...addOns, warranty: qty }),
-      image: '/loupesondesk2.png',
+      image: '/warranty.png',
+    },
+    {
+      id: 'cleaningKit',
+      name: 'Headlight',
+      description: 'Headlight options coming in Q1 2026- Subscribe to Newsletter for more info.',
+      price: 39,
+      quantity: addOns.cleaningKit,
+      setQuantity: (qty: number) => setAddOns({ ...addOns, cleaningKit: qty }),
+      image: '/headlight.png',
     },
   ]
 
@@ -364,10 +376,24 @@ function CartContent() {
                     {addOnProducts.map((item) => (
                       <div 
                         key={item.id} 
-                        className={`${styles.addOnItem} ${item.quantity > 0 ? styles.addOnItemSelected : ''}`}
+                        className={`${styles.addOnItem} ${item.quantity > 0 ? styles.addOnItemSelected : ''} ${item.id === 'cleaningKit' ? styles.addOnItemDisabled : ''}`}
                         onClick={() => {
-                          item.setQuantity(item.quantity === 0 ? 1 : 0)
+                          if (item.id !== 'cleaningKit') {
+                            const newQuantity = item.quantity === 0 ? 1 : 0
+                            
+                            // Update local state
+                            const updatedAddOns = {
+                              ...addOns,
+                              [item.id]: newQuantity,
+                            }
+                            setAddOns(updatedAddOns)
+                            item.setQuantity(newQuantity)
+                            
+                            // Update cart items with add-on selections
+                            updateCartAddOns(updatedAddOns.case > 0, updatedAddOns.warranty > 0)
+                          }
                         }}
+                        style={item.id === 'cleaningKit' ? { cursor: 'default' } : {}}
                       >
                         <div className={styles.addOnImage}>
                           <Image

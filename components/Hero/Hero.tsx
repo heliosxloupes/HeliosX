@@ -467,15 +467,15 @@ export default function Hero() {
             />
           </div>
           {/* Logo - Top Left */}
-          <div className={styles.homeLogoContainer}>
+          <Link href="/" className={styles.homeLogoContainer}>
             <Image
               src="/logominimalnowriting.png"
               alt="HeliosX Logo"
-              width={40}
-              height={40}
+              width={60}
+              height={60}
               style={{ objectFit: 'contain' }}
             />
-          </div>
+          </Link>
           {/* Text Overlay - Top Left */}
           <div className={styles.imageTextOverlay}>
             <BlurText 

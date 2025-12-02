@@ -9,6 +9,8 @@ export type CartItem = {
   selectedFrameName?: string | null
   selectedFrameImage?: string | null
   selectedMagnification?: string | null
+  hasPrescriptionLenses?: boolean
+  hasExtendedWarranty?: boolean
   stripeProductId?: string | null
 }
 
@@ -88,6 +90,17 @@ export function removeFromCart(productSlug: string): void {
   const cart = getCart()
   const filteredCart = cart.filter(item => item.productSlug !== productSlug)
   saveCart(filteredCart)
+}
+
+// Update add-on selections for all cart items
+export function updateCartAddOns(hasPrescriptionLenses: boolean, hasExtendedWarranty: boolean): void {
+  const cart = getCart()
+  const updatedCart = cart.map(item => ({
+    ...item,
+    hasPrescriptionLenses,
+    hasExtendedWarranty,
+  }))
+  saveCart(updatedCart)
 }
 
 // Clear entire cart

@@ -130,12 +130,16 @@ function CheckoutContent() {
           price: item.price,
           stripeProductId: item.stripeProductId || null,
           selectedMagnification: item.selectedMagnification || null,
+          hasPrescriptionLenses: item.hasPrescriptionLenses || false,
+          hasExtendedWarranty: item.hasExtendedWarranty || false,
         })) : [{
           productSlug: productSlug,
           quantity: quantity,
           price: product.price,
           stripeProductId: null,
           selectedMagnification: null,
+          hasPrescriptionLenses: false,
+          hasExtendedWarranty: false,
         }]
         
         console.log('Creating Stripe session with cart items:', itemsToSend)
@@ -260,6 +264,14 @@ function CheckoutContent() {
                   ? (item.selectedMagnification || null)
                   : null
                 
+                const hasPrescriptionLenses = cartItems.length > 0 
+                  ? (item.hasPrescriptionLenses || false)
+                  : false
+                
+                const hasExtendedWarranty = cartItems.length > 0 
+                  ? (item.hasExtendedWarranty || false)
+                  : false
+                
                 return (
                   <div key={`${item.productSlug}-${index}`} className={styles.orderItem}>
                     <div className={styles.orderItemImageContainer}>
@@ -282,13 +294,29 @@ function CheckoutContent() {
                           />
                         </div>
                       )}
-                      {selectedMagnification && (
-                        <div className={styles.magnificationImageContainer}>
-                          <div className={styles.magnificationIconStatic}>
-                            <span className={styles.magnificationValueStatic}>{selectedMagnification}</span>
+                      <div className={styles.selectionIconsContainer}>
+                        {selectedMagnification && (
+                          <div className={styles.magnificationImageContainer}>
+                            <div className={styles.magnificationIconStatic}>
+                              <span className={styles.magnificationValueStatic}>{selectedMagnification}</span>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                        {hasPrescriptionLenses && (
+                          <div className={styles.addOnIconContainer}>
+                            <div className={styles.addOnIcon}>
+                              <span className={styles.addOnIconText}>RX</span>
+                            </div>
+                          </div>
+                        )}
+                        {hasExtendedWarranty && (
+                          <div className={styles.addOnIconContainer}>
+                            <div className={styles.addOnIcon}>
+                              <span className={styles.addOnIconText}>W</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className={styles.orderItemInfo}>
                       <h3 className={styles.orderItemName}>{itemName}</h3>
