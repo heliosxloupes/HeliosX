@@ -100,6 +100,23 @@ const articles: Article[] = [
     ],
     pubmedUrl: 'https://pubmed.ncbi.nlm.nih.gov/11743419/',
   },
+  {
+    id: '17396708',
+    title: 'A clinician\'s guide to purchasing surgical loupes',
+    journal: 'Tex Dent J',
+    year: '2007',
+    topic: 'Ergonomics / Equipment selection',
+    level: 'Resident',
+    summary:
+      'Comprehensive guide discussing key features to consider when purchasing surgical loupes, emphasizing proper fitting, adjustment, and the advantages of compound and prism telescopic loupes over simple diopter lenses.',
+    bullets: [
+      'Discusses enhanced vision of fine detail and critical ergonomic advantages of loupes.',
+      'Emphasizes proper fitting and adjustment as essential elements for successful loupe use.',
+      'Compares compound and prism telescopic loupes to simple diopter lenses, highlighting superior benefits despite higher cost.',
+      'Covers key features including magnification, working distance, field of view, and lighting considerations.',
+    ],
+    pubmedUrl: 'https://pubmed.ncbi.nlm.nih.gov/17396708/',
+  },
 ]
 
 export default function EducationPage() {
@@ -138,8 +155,112 @@ export default function EducationPage() {
           </div>
         </section>
 
-        {/* ARTICLE GRID */}
+        {/* FEATURED ARTICLE */}
         <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:py-18">
+          <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="mb-2 text-xs uppercase tracking-[0.25em] text-orange-400/80">
+                Featured Research
+              </p>
+              <h2 className="text-xl font-semibold text-white sm:text-2xl">
+                Latest Evidence on Prismatic Loupes
+              </h2>
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true, amount: 0.2 }}
+            className="mb-12"
+          >
+            <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-950/40 via-neutral-900/90 to-neutral-950/90 p-6 shadow-2xl backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.02] hover:border-orange-500/50 hover:shadow-[0_0_40px_rgba(255,157,0,0.3)] sm:p-8 lg:p-10">
+              {/* Enhanced glow effect on hover */}
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,157,0,0.15),_transparent_60%)] transition-opacity duration-300 group-hover:bg-[radial-gradient(circle_at_top_right,_rgba(255,157,0,0.35),_transparent_50%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,157,0,0),_rgba(255,157,0,0.1))] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              
+              {/* Featured badge */}
+              <div className="relative mb-4 flex items-center gap-3">
+                <span className="rounded-full border border-orange-400/50 bg-orange-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-orange-300">
+                  Featured Study
+                </span>
+                <span className="text-sm text-neutral-400">2024</span>
+              </div>
+
+              {/* Title */}
+              <h3 className="relative mb-3 text-xl font-bold leading-tight text-white sm:text-2xl lg:text-3xl">
+                Ergonomics and performance of using prismatic loupes in simulated surgical tasks among surgeons
+              </h3>
+
+              {/* Journal / Authors */}
+              <p className="relative mb-4 text-sm uppercase tracking-[0.15em] text-orange-300/80 sm:text-base">
+                Frontiers in Public Health • Randomized Controlled Trial
+              </p>
+
+              {/* Summary */}
+              <p className="relative mb-5 text-base leading-relaxed text-neutral-200 sm:text-lg">
+                A randomized controlled, cross-over trial examining the impact of prismatic loupes on surgeons&apos; physical workload, musculoskeletal discomfort, and performance during simulated surgical tasks. This study provides critical evidence for ergonomic benefits of prismatic loupe technology.
+              </p>
+
+              {/* Key Findings */}
+              <div className="relative mb-6">
+                <h4 className="mb-3 text-sm font-semibold uppercase tracking-[0.15em] text-orange-300/90">
+                  Key Findings
+                </h4>
+                <ul className="space-y-2.5 text-sm leading-relaxed text-neutral-200 sm:text-base">
+                  <li className="flex gap-3">
+                    <span className="mt-1.5 inline-block h-2 w-2 flex-none rounded-full bg-orange-400" />
+                    <span><strong className="text-orange-300">Reduced head inclinations:</strong> Prismatic loupes (both low-tilt and high-tilt) significantly reduced head inclinations compared to traditional loupes (p &lt; 0.001)</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1.5 inline-block h-2 w-2 flex-none rounded-full bg-orange-400" />
+                    <span><strong className="text-orange-300">Lower neck muscle activity:</strong> Significant reduction in cervical erector spinae and upper trapezius muscle activity (p &lt; 0.05)</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1.5 inline-block h-2 w-2 flex-none rounded-full bg-orange-400" />
+                    <span><strong className="text-orange-300">Reduced neck discomfort:</strong> Lower reported neck discomfort with no significant difference in surgical errors (p = 0.628)</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-1.5 inline-block h-2 w-2 flex-none rounded-full bg-orange-400" />
+                    <span><strong className="text-orange-300">Surgeon preference:</strong> Most surgeons (N = 12) preferred low-tilt prismatic loupes for comfort and visual functions</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Authors */}
+              <div className="relative mb-6 text-xs text-neutral-400 sm:text-sm">
+                <p className="font-medium text-neutral-300">Authors:</p>
+                <p className="mt-1">Xuelong Fan, Liyun Yang, Nathalie Young, Ilayda Kaner, Magnus Kjellman, Mikael Forsman</p>
+              </div>
+
+              {/* Footer */}
+              <div className="relative mt-auto flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-wrap gap-2 text-sm text-neutral-400">
+                  <span className="rounded-full border border-neutral-700/70 bg-neutral-900/50 px-3 py-1.5">
+                    PMC: PMC10803506
+                  </span>
+                  <span className="rounded-full border border-neutral-700/70 bg-neutral-900/50 px-3 py-1.5">
+                    PMID: 38264242
+                  </span>
+                </div>
+
+                <Link
+                  href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10803506/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-orange-400/60 bg-orange-500/20 px-5 py-2.5 text-sm font-semibold text-orange-200 transition-all hover:border-orange-300 hover:bg-orange-500/30 hover:shadow-lg hover:shadow-orange-500/20"
+                >
+                  Read Full Article
+                  <span aria-hidden className="translate-y-[0.5px] text-base">
+                    ↗
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ARTICLE GRID */}
           <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold text-white sm:text-2xl">

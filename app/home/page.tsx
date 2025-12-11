@@ -45,15 +45,28 @@ export default function HomePage() {
           <HeroSection />
           <ManifestoSection />
           <HorizontalScrollSection />
-          <WhyHeliosXSection />
-          <InUseSection />
-          <OpticalClaritySection />
-          <UseCasesSection />
-          <CustomizationSection />
-          <ErgonomicsHealthSection />
-          <DiveDeeperSection />
-          <PublicBenefitSection />
-          <ProductAtGlanceSection />
+
+          {/* Global flowing background for mid sections */}
+          <section className="relative">
+            <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-black via-[#050814] to-black">
+              {/* top glow */}
+              <div className="absolute -top-40 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-emerald-500/18 blur-3xl" />
+              {/* mid-right glow */}
+              <div className="absolute top-1/3 right-0 h-80 w-80 translate-x-1/4 rounded-full bg-sky-500/16 blur-3xl" />
+              {/* bottom-left glow */}
+              <div className="absolute bottom-[-140px] left-0 h-80 w-80 -translate-x-1/3 rounded-full bg-orange-400/14 blur-3xl" />
+            </div>
+
+            <WhyHeliosXSection />
+            <InUseSection />
+            <OpticalClaritySection />
+            <UseCasesSection />
+            <CustomizationSection />
+            <ErgonomicsHealthSection />
+            <DiveDeeperSection />
+            <PublicBenefitSection />
+            <ProductAtGlanceSection />
+          </section>
         </main>
 
         <HeliosXFooter />
@@ -170,12 +183,12 @@ function HeroSection() {
                 variants={fadeUp}
                 transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
               >
-                <a
-                  href="#cta"
+                <Link
+                  href="/product"
                   className="rounded-full bg-white px-6 py-2 text-sm font-semibold text-black shadow-lg shadow-white/15 transition-colors hover:bg-neutral-200"
                 >
                   Shop HeliosX Loupes
-                </a>
+                </Link>
               </motion.div>
             </div>
 
@@ -671,7 +684,7 @@ function HorizontalScrollSection() {
 
 function WhyHeliosXSection() {
   return (
-    <section className="bg-black px-4 py-16 md:px-8">
+    <section className="px-4 py-16 md:px-8">
       <motion.div
         className="mx-auto max-w-4xl space-y-4 text-center"
         variants={fadeUp}
@@ -701,7 +714,7 @@ function WhyHeliosXSection() {
 
 function InUseSection() {
   return (
-    <section className="bg-black px-4 pb-20 md:px-8">
+    <section className="px-4 pb-20 md:px-8">
       <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[3fr,2fr] md:items-center">
         <motion.div
           whileHover={{ y: -6 }}
@@ -759,13 +772,7 @@ function InUseSection() {
 
 function OpticalClaritySection() {
   return (
-    <section className="relative bg-black px-4 py-20 md:px-8 md:py-28 overflow-hidden">
-      {/* Background glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
-        <div className="absolute bottom-0 right-10 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl" />
-      </div>
-
+    <section className="relative px-4 py-20 md:px-8 md:py-28 overflow-hidden">
       <div className="relative mx-auto grid max-w-6xl gap-10 md:grid-cols-[3fr,2fr] md:items-center">
         {/* Text side */}
         <motion.div
@@ -905,7 +912,7 @@ function UseCasesSection() {
   ];
 
   return (
-    <section className="bg-black px-4 py-20 md:px-8 md:py-24">
+    <section className="px-4 py-20 md:px-8 md:py-24">
       <div className="mx-auto max-w-6xl space-y-8">
         <motion.div
           variants={fadeUp}
@@ -961,12 +968,7 @@ function UseCasesSection() {
 
 function CustomizationSection() {
   return (
-    <section className="relative bg-black px-4 py-20 md:px-8 md:py-28 overflow-hidden">
-      {/* subtle background accent */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-orange-400/10 blur-3xl" />
-      </div>
-
+    <section className="relative px-4 py-20 md:px-8 md:py-28 overflow-hidden">
       <div className="relative mx-auto grid max-w-6xl gap-10 md:grid-cols-[3fr,2fr] md:items-center">
         {/* Text side */}
         <motion.div
@@ -1077,13 +1079,7 @@ function CustomizationSection() {
 
 function ErgonomicsHealthSection() {
   return (
-    <section className="relative bg-black px-4 py-20 md:px-8 md:py-28 overflow-hidden">
-      {/* soft diagonal glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-10 top-0 h-72 w-72 rounded-full bg-emerald-500/12 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl" />
-      </div>
-
+    <section className="relative px-4 py-20 md:px-8 md:py-28 overflow-hidden">
       <div className="relative mx-auto max-w-6xl space-y-10">
         <motion.div
           variants={fadeUp}
@@ -1173,7 +1169,7 @@ function DiveDeeperSection() {
   return (
     <section
       id="faq"
-      className="border-y border-white/10 bg-gradient-to-r from-neutral-950 via-black to-neutral-950"
+      className="border-y border-white/10"
     >
       <motion.div
         className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 py-12 md:flex-row md:px-6 md:py-16"
@@ -1280,7 +1276,7 @@ function PublicBenefitSection() {
 
 function ProductAtGlanceSection() {
   return (
-    <section id="cta" className="border-y border-white/10 bg-black">
+    <section id="cta" className="border-y border-white/10">
       <motion.div
         className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24"
         initial="hidden"
@@ -1334,7 +1330,7 @@ function ProductAtGlanceSection() {
             </div>
 
             <Link
-              href="/product/galileo"
+              href="/product"
               className="flex w-full items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-black shadow-lg shadow-white/15 transition-colors hover:bg-neutral-200"
             >
               Shop HeliosX
@@ -1446,7 +1442,7 @@ function HeliosXFooter() {
           </div>
           <div className="flex flex-wrap gap-3 text-sm">
             <Link
-              href="/product/galileo"
+              href="/product"
               className="rounded-full bg-white px-4 py-2 font-semibold text-black shadow-lg shadow-white/10 transition hover:bg-neutral-200"
             >
               Shop HeliosX

@@ -355,6 +355,22 @@ function ParallaxProductHero() {
 /* --------------------------------------------- */
 
 function OurLoupesGrid() {
+  // Helper function to get glow color for each product
+  const getGlowColor = (slug: string) => {
+    switch (slug) {
+      case 'galileo':
+        return '56,189,248'; // Sky blue
+      case 'newton':
+        return '16,185,129'; // Emerald
+      case 'apollo':
+        return '255,157,0'; // Orange
+      case 'kepler':
+        return '139,92,246'; // Purple
+      default:
+        return '56,189,248';
+    }
+  };
+
   const products = [
     {
       slug: "galileo",
@@ -438,8 +454,39 @@ function OurLoupesGrid() {
             >
               <Link
                 href={`/product/${product.slug}`}
-                className="block rounded-2xl border border-white/10 bg-neutral-900/70 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+                className="group/card block relative rounded-2xl border border-white/10 bg-neutral-900/70 overflow-hidden transition-all duration-300 ease-out hover:scale-[1.02] hover:border-white/30"
+                style={{
+                  boxShadow: '0 0 0 rgba(0,0,0,0)',
+                  transition: 'all 0.3s ease-out'
+                } as React.CSSProperties}
+                onMouseEnter={(e) => {
+                  const glowColor = getGlowColor(product.slug);
+                  e.currentTarget.style.boxShadow = `0 0 50px rgba(${glowColor}, 0.25)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 0 rgba(0,0,0,0)';
+                }}
               >
+                {/* Enhanced glow effect on hover - variant colors per product */}
+                <div 
+                  className="pointer-events-none absolute inset-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                  style={{
+                    background: `radial-gradient(circle at top right, rgba(${getGlowColor(product.slug)}, 0.12), transparent 60%)`,
+                    opacity: 0.5
+                  }}
+                />
+                <div 
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                  style={{
+                    background: `radial-gradient(circle at top right, rgba(${getGlowColor(product.slug)}, 0.3), transparent 50%)`
+                  }}
+                />
+                <div 
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
+                  style={{
+                    background: `radial-gradient(circle at center, transparent, rgba(${getGlowColor(product.slug)}, 0.1))`
+                  }}
+                />
                 <div className="relative aspect-[4/5] overflow-hidden bg-neutral-950">
                   <Image
                     src={product.imageSrc}

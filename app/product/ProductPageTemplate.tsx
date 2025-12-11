@@ -219,9 +219,9 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-black pt-24 text-neutral-100">
+      <main className="min-h-screen bg-black pt-16 text-neutral-100">
         {/* HERO + CONFIG */}
-        <section className="w-full pt-6 pb-20 lg:pb-28">
+        <section className="w-full pt-4 pb-20 lg:pb-28">
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -327,27 +327,36 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                 </div>
               </motion.div>
 
-              {/* Magnification chooser */}
-              <div>
-                <p className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-neutral-500">
-                  Magnification
+              {/* Magnification chooser - Prominent */}
+              <motion.div
+                variants={cardVariants}
+                className="rounded-3xl border-2 border-emerald-400/30 bg-gradient-to-br from-emerald-950/40 via-neutral-900/90 to-neutral-950/90 p-5 shadow-[0_0_40px_rgba(16,185,129,0.2)] backdrop-blur-sm"
+              >
+                <div className="mb-4 flex items-center gap-2">
+                  <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-300">
+                    Magnification
+                  </p>
+                  <span className="h-1 w-1 rounded-full bg-emerald-400" />
+                </div>
+                <p className="mb-4 text-xs leading-relaxed text-neutral-300">
+                  Select your preferred magnification level for optimal precision.
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {config.magnifications.map((mag) => (
                     <button
                       key={mag}
                       onClick={() => setSelectedMag(mag)}
-                      className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
+                      className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
                         selectedMag === mag
-                          ? 'bg-white text-black shadow-[0_0_24px_rgba(255,255,255,0.45)]'
-                          : 'border border-white/15 bg-black/40 text-neutral-200 hover:border-white/40'
+                          ? 'bg-white text-black shadow-[0_0_30px_rgba(255,255,255,0.6)] scale-105'
+                          : 'border-2 border-white/20 bg-black/50 text-neutral-200 hover:border-emerald-400/50 hover:bg-emerald-950/30 hover:scale-105'
                       }`}
                     >
                       {mag}
                     </button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Frame selector */}
               <motion.div
@@ -368,10 +377,10 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                           setSelectedFrameId(frame.id)
                           setSelectedFrameColor(frame.colors[0].value)
                         }}
-                        className={`relative overflow-hidden rounded-2xl border bg-black/40 transition ${
+                        className={`relative overflow-hidden rounded-2xl bg-black/40 transition-all duration-300 ${
                           isActive
-                            ? 'border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.7)]'
-                            : 'border-white/10 hover:border-white/40'
+                            ? 'border-2 border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.8)] ring-2 ring-emerald-400/30'
+                            : 'border border-white/10 hover:border-white/40 hover:scale-105'
                         }`}
                       >
                         <div className="relative h-16 w-full">
