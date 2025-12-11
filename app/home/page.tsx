@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { LenisProvider } from "@/components/lenis-provider";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
