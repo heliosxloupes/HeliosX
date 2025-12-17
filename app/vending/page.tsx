@@ -24,6 +24,8 @@ export default function VendingPage() {
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
 
+  // Vending product page
+
   const productName = 'Vending Product'
   const shortName = 'Vending'
   const description =
