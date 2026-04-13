@@ -112,9 +112,9 @@ function MobileNav() {
           >
             {/* gradient background (static, not animated) */}
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-500/22 blur-3xl" />
-              <div className="absolute top-1/3 right-0 h-80 w-80 translate-x-1/4 rounded-full bg-sky-500/18 blur-3xl" />
-              <div className="absolute bottom-[-120px] left-0 h-72 w-72 -translate-x-1/3 rounded-full bg-orange-400/16 blur-3xl" />
+              <div className="absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[#F5B544]/10 blur-3xl" />
+              <div className="absolute top-1/3 right-0 h-80 w-80 translate-x-1/4 rounded-full bg-neutral-700/20 blur-3xl" />
+              <div className="absolute bottom-[-120px] left-0 h-72 w-72 -translate-x-1/3 rounded-full bg-[#F5B544]/7 blur-3xl" />
             </div>
 
             {/* sliding inner content panel */}
@@ -190,10 +190,10 @@ function MobileNav() {
                           className="w-full text-left"
                         >
                           <span
-                            className={`text-[1.46rem] ${
+                            className={`text-[1.46rem] transition-all duration-200 ${
                               pathname === item.href || (item.href.includes('#') && pathname === item.href.split('#')[0])
-                                ? "bg-gradient-to-r from-white via-sky-200 to-emerald-200 bg-clip-text font-semibold text-transparent"
-                                : "font-medium text-neutral-100"
+                                ? "bg-gradient-to-r from-white via-neutral-200 to-[#F5B544] bg-clip-text font-semibold text-transparent"
+                                : "font-medium text-neutral-200 hover:text-white"
                             }`}
                           >
                             {item.label}
@@ -249,7 +249,7 @@ function MobileNav() {
                     setOpen(false);
                     router.push("/product");
                   }}
-                  className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[0.7rem] font-medium text-neutral-50 transition hover:bg-white/20"
+                  className="rounded-full bg-[#F5B544] px-4 py-1.5 text-[0.7rem] font-semibold text-black transition-all duration-200 hover:bg-[#f7c360]"
                 >
                   View loupes
                 </button>
@@ -362,7 +362,7 @@ export default function Header() {
 
           <Link
             href="/product"
-            className="hidden rounded-full bg-white px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-black shadow-[0_0_32px_rgba(255,255,255,0.7)] transition hover:bg-neutral-100 md:inline-flex"
+            className="hidden rounded-full bg-[#F5B544] px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-black shadow-[0_0_24px_rgba(245,181,68,0.45)] transition-all duration-200 hover:bg-[#f7c360] hover:shadow-[0_0_32px_rgba(245,181,68,0.6)] md:inline-flex"
           >
             Order now
           </Link>

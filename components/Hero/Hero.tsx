@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import Lenis from 'lenis'
 import Noise from '../Noise'
 import MagicBento, { BentoCardProps } from '../MagicBento'
 import BlurText from '../BlurText'
@@ -136,128 +135,85 @@ export default function Hero() {
   useEffect(() => {
     if (!heroRef.current) return
 
-    // Create Lenis instance for scroll-based animations
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    })
-
-    const handleLenisScroll = ({ scroll, limit }: { scroll: number; limit: number }) => {
+    // Use native scroll events instead of a second Lenis instance.
+    // The root SmoothScroll provider already runs Lenis globally — spinning up
+    // a second one here caused double-scrolling and conflicting RAF loops.
+    const handleScroll = () => {
       if (!heroRef.current) return
 
-      const rect = heroRef.current.getBoundingClientRect()
+      const heroHeight = heroRef.current.offsetHeight
       const windowHeight = window.innerHeight
-      const heroHeight = rect.height
-      
-      // Calculate scroll progress (0 to 1.6 - includes 5 circles + dive deeper section)
-      // Progress increases as we scroll through the hero section
-      const scrollPosition = scroll
       const heroStart = heroRef.current.offsetTop
+      const scrollPosition = window.scrollY
       const scrollableHeight = heroHeight - windowHeight
-      
-      // Normalize progress so that when we reach the end of scrollable area, progress = 1.6
-      // Progress 1.0-1.5: circles panning, 1.5-1.6: dive deeper section slides in (fast transition)
-      const progress = scrollableHeight > 0 
+
+      const progress = scrollableHeight > 0
         ? Math.min(1.6, Math.max(0, ((scrollPosition - heroStart) / scrollableHeight) * 1.6))
         : 0
       setScrollProgress(progress)
 
-      // First text: appears word by word from 0.4 to 0.6
-      // Line 1 appears first, then line 2
+      // First text: word by word from 0.4 to 0.6
       if (progress >= 0.4 && progress <= 0.6) {
-        const wordProgress = (progress - 0.4) / 0.2 // 0 to 1
+        const wordProgress = (progress - 0.4) / 0.2
         const totalWords = firstWordsLine1.length + firstWordsLine2.length
         const wordIndex = Math.floor(wordProgress * totalWords)
-        
-        // Show line 1 words first
         if (wordIndex < firstWordsLine1.length) {
-          const visibleWordsLine1 = firstWordsLine1.slice(0, wordIndex + 1)
-          setFirstTextWordsLine1(visibleWordsLine1)
+          setFirstTextWordsLine1(firstWordsLine1.slice(0, wordIndex + 1))
           setFirstTextWordsLine2([])
         } else {
-          // Show all of line 1, then start showing line 2
           setFirstTextWordsLine1(firstWordsLine1)
           const line2WordIndex = wordIndex - firstWordsLine1.length
-          const visibleWordsLine2 = firstWordsLine2.slice(0, Math.min(line2WordIndex + 1, firstWordsLine2.length))
-          setFirstTextWordsLine2(visibleWordsLine2)
+          setFirstTextWordsLine2(firstWordsLine2.slice(0, Math.min(line2WordIndex + 1, firstWordsLine2.length)))
         }
         setShowSecondText(false)
       } else if (progress > 0.6 && progress <= 0.82) {
-        // Extended transition period - keep first text visible
-        // Allow "accessible to all" to fully transform red (0.6-0.69)
-        // Then hold for additional scroll time (0.69-0.82) before transitioning
         setFirstTextWordsLine1(firstWordsLine1)
         setFirstTextWordsLine2(firstWordsLine2)
         setShowSecondText(false)
       } else if (progress > 0.82 && progress <= 0.95) {
-        // Second text: appears word by word from 0.82 to 0.95 (slower animation, more delayed start)
         setFirstTextWordsLine1([])
         setFirstTextWordsLine2([])
         setShowSecondText(true)
-        const wordProgress = (progress - 0.82) / 0.13 // 0 to 1 (slower animation over 0.13 scroll progress)
+        const wordProgress = (progress - 0.82) / 0.13
         const totalWords = secondWordsLine1.length + secondWordsLine2.length
         const wordIndex = Math.floor(wordProgress * totalWords)
-        
-        // Show line 1 words first
         if (wordIndex < secondWordsLine1.length) {
-          const visibleWordsLine1 = secondWordsLine1.slice(0, wordIndex + 1)
-          setSecondTextWordsLine1(visibleWordsLine1)
+          setSecondTextWordsLine1(secondWordsLine1.slice(0, wordIndex + 1))
           setSecondTextWordsLine2([])
         } else {
-          // Show all of line 1, then start showing line 2
           setSecondTextWordsLine1(secondWordsLine1)
           const line2WordIndex = wordIndex - secondWordsLine1.length
-          const visibleWordsLine2 = secondWordsLine2.slice(0, Math.min(line2WordIndex + 1, secondWordsLine2.length))
-          setSecondTextWordsLine2(visibleWordsLine2)
+          setSecondTextWordsLine2(secondWordsLine2.slice(0, Math.min(line2WordIndex + 1, secondWordsLine2.length)))
         }
       } else if (progress > 0.95 && progress <= 1.05) {
-        // Show all second text, then transition to device2
         setSecondTextWordsLine1(secondWordsLine1)
         setSecondTextWordsLine2(secondWordsLine2)
         setShowDevice2(false)
       } else if (progress > 1.05 && progress <= 1.15) {
-        // Device2 appears and moves in
         setSecondTextWordsLine1([])
         setSecondTextWordsLine2([])
         setShowSecondText(false)
         setShowDevice2(true)
-        } else {
-          // Before 40% or after 1.15
-          if (progress < 0.4 || progress > 1.15) {
-            setFirstTextWordsLine1([])
-            setFirstTextWordsLine2([])
-            setSecondTextWordsLine1([])
-            setSecondTextWordsLine2([])
-            setShowSecondText(false)
-          }
+      } else {
+        if (progress < 0.4 || progress > 1.15) {
+          setFirstTextWordsLine1([])
+          setFirstTextWordsLine2([])
+          setSecondTextWordsLine1([])
+          setSecondTextWordsLine2([])
+          setShowSecondText(false)
+        }
         if (progress < 1.05) {
           setShowDevice2(false)
         }
       }
     }
 
-    // Listen to Lenis scroll events
-    lenis.on('scroll', handleLenisScroll)
+    // Fire once on mount to set initial state
+    handleScroll()
 
-    // Initial call
-    handleLenisScroll({ scroll: lenis.scroll, limit: lenis.limit })
-
-    // RAF loop for Lenis
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-    requestAnimationFrame(raf)
-
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
-      lenis.off('scroll', handleLenisScroll)
-      lenis.destroy()
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
@@ -499,7 +455,7 @@ export default function Hero() {
           </div>
           {/* Scroll Indicator Arrow - Bottom Center */}
           <div className={styles.scrollIndicatorArrow}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FF9B00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#F5B544" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </div>
