@@ -54,5 +54,3 @@ export function LenisProvider({ children }: LenisProviderProps) {
 
 
 
-
-

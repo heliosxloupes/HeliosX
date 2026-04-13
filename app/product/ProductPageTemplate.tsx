@@ -221,60 +221,60 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
       <Header />
       <main className="min-h-screen bg-black pt-16 text-neutral-100">
         {/* HERO + CONFIG */}
-        <section className="w-full pt-4 pb-16 lg:pb-24">
+        <section className="w-full pt-4 pb-20 lg:pb-28">
           <motion.div
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="mx-auto flex max-w-[1400px] flex-col gap-8 px-4 lg:flex-row lg:items-start lg:gap-10 lg:px-10 xl:px-16"
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="mx-auto flex max-w-[1400px] flex-col gap-10 px-4 lg:flex-row lg:items-start lg:px-10 xl:px-16"
           >
             {/* LEFT: hero image + thumbs */}
             <div className="flex flex-1 flex-col items-center lg:items-start">
               <motion.div
-                whileHover={{ y: -3 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 28 }}
-                className="relative w-full max-w-[900px] overflow-hidden rounded-[28px] border border-white/8 bg-black/80 shadow-[0_24px_100px_rgba(0,0,0,0.8)]"
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 220, damping: 20 }}
+                className="relative w-full max-w-[900px] overflow-hidden rounded-[32px] border border-white/10 bg-black/80 shadow-[0_30px_120px_rgba(0,0,0,0.85)]"
               >
                 <div className="relative aspect-[4/5] w-full md:aspect-[3/4] lg:aspect-[16/9]">
                   <Image
                     src={config.heroImages[activeHeroIndex]}
-                    alt={`${config.shortName} surgical loupes`}
+                    alt={`${config.shortName} surgical loupes hero`}
                     fill
-                    className="object-cover transition-opacity duration-500"
+                    className="object-cover"
                     priority
                   />
-                  {/* grain overlay */}
-                  <div className="pointer-events-none absolute inset-0 opacity-30 mix-blend-overlay">
+                  {/* slight grain overlay */}
+                  <div className="pointer-events-none absolute inset-0 opacity-40 mix-blend-overlay">
                     <Noise
                       patternSize={250}
                       patternScaleX={1}
                       patternScaleY={1}
                       patternRefreshInterval={2}
-                      patternAlpha={5}
+                      patternAlpha={6}
                     />
                   </div>
                 </div>
 
                 <button
                   onClick={scrollToTech}
-                  className="absolute right-5 top-5 rounded-full border border-white/15 bg-black/55 px-4 py-1.5 text-xs font-medium text-neutral-300 backdrop-blur-md transition-all duration-200 hover:border-white/40 hover:text-white"
+                  className="absolute right-6 top-6 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 text-xs font-medium text-neutral-100 backdrop-blur-md transition hover:bg-white/10"
                 >
-                  Specs ↓
+                  View product specs
                 </button>
 
-                <div className="pointer-events-auto absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2.5 rounded-full bg-black/50 px-3 py-2 backdrop-blur-md">
+                <div className="pointer-events-auto absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-3 rounded-full bg-black/55 px-3 py-2 backdrop-blur-md">
                   {config.heroImages.map((src, idx) => (
                     <button
                       key={src}
                       onClick={() => setActiveHeroIndex(idx)}
-                      className={`relative overflow-hidden rounded-2xl border transition-all duration-300 ${
+                      className={`relative overflow-hidden rounded-[18px] border transition-all duration-200 ${
                         activeHeroIndex === idx
-                          ? 'scale-[1.1] border-[#F5B544] shadow-[0_0_16px_rgba(245,181,68,0.6)]'
-                          : 'border-white/10 hover:border-white/35 hover:scale-[1.05]'
+                          ? 'scale-[1.08] border-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.7)]'
+                          : 'border-white/10 hover:border-white/40 hover:scale-[1.05]'
                       }`}
                     >
-                      <div className="relative h-10 w-10 sm:h-11 sm:w-11">
+                      <div className="relative h-10 w-10 xs:h-11 xs:w-11 sm:h-12 sm:w-12 lg:h-11 lg:w-11">
                         <Image
                           src={src}
                           alt={`View ${idx + 1}`}
@@ -291,18 +291,18 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
             {/* RIGHT: config column */}
             <motion.div
               variants={fadeUp}
-              transition={{ duration: 0.65, delay: 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="flex w-full flex-col gap-5 sm:max-w-md lg:max-w-sm xl:max-w-[420px]"
+              transition={{ duration: 0.6, delay: 0.05, ease: 'easeOut' }}
+              className="flex w-full max-w-md flex-col gap-6 lg:max-w-sm xl:max-w-md"
             >
               {/* Title + description */}
               <div>
-                <p className="mb-1 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-neutral-500">
+                <p className="mb-1 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-neutral-500">
                   HeliosX · {config.shortName}
                 </p>
-                <h1 className="bg-gradient-to-r from-white via-slate-200 to-[#F5B544]/70 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl">
+                <h1 className="bg-gradient-to-r from-white via-slate-200 to-emerald-200 bg-clip-text text-2xl font-semibold text-transparent sm:text-3xl">
                   {config.name}
                 </h1>
-                <p className="mt-2.5 text-sm leading-relaxed text-neutral-400">
+                <p className="mt-3 text-sm leading-relaxed text-neutral-300">
                   {config.description}
                 </p>
               </div>
@@ -310,43 +310,46 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
               {/* Highlights */}
               <motion.div
                 variants={cardVariants}
-                className="rounded-2xl border border-white/8 bg-neutral-900/60 p-4 text-xs text-neutral-200"
+                className="rounded-3xl border border-white/10 bg-neutral-900/70 p-4 text-xs text-neutral-200 shadow-[0_24px_80px_rgba(0,0,0,0.7)]"
               >
-                <p className="mb-3 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                <p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-neutral-500">
                   Highlights
                 </p>
-                <div className="grid grid-cols-2 gap-2.5 text-[0.75rem]">
+                <div className="grid grid-cols-2 gap-3 text-[0.75rem]">
                   {config.highlights.map((item) => (
                     <div key={item} className="flex items-start gap-2">
-                      <span className="mt-[3px] inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#F5B544]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-black" />
+                      <span className="mt-[3px] inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500">
+                        <span className="h-2 w-2 rounded-full bg-black" />
                       </span>
-                      <span className="text-neutral-300">{item}</span>
+                      <span>{item}</span>
                     </div>
                   ))}
                 </div>
               </motion.div>
 
-              {/* Magnification chooser */}
+              {/* Magnification chooser - Prominent */}
               <motion.div
                 variants={cardVariants}
-                className="rounded-2xl border border-[#F5B544]/20 bg-gradient-to-br from-[#1a1200]/50 via-neutral-900/90 to-neutral-950/90 p-5 shadow-[0_0_32px_rgba(245,181,68,0.08)] backdrop-blur-sm"
+                className="rounded-3xl border-2 border-emerald-400/30 bg-gradient-to-br from-emerald-950/40 via-neutral-900/90 to-neutral-950/90 p-5 shadow-[0_0_40px_rgba(16,185,129,0.2)] backdrop-blur-sm"
               >
                 <div className="mb-4 flex items-center gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#F5B544]">
+                  <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-300">
                     Magnification
                   </p>
-                  <span className="h-1 w-1 rounded-full bg-[#F5B544]/60" />
+                  <span className="h-1 w-1 rounded-full bg-emerald-400" />
                 </div>
-                <div className="flex flex-wrap gap-2.5">
+                <p className="mb-4 text-xs leading-relaxed text-neutral-300">
+                  Select your preferred magnification level for optimal precision.
+                </p>
+                <div className="flex flex-wrap gap-3">
                   {config.magnifications.map((mag) => (
                     <button
                       key={mag}
                       onClick={() => setSelectedMag(mag)}
-                      className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-250 ${
+                      className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
                         selectedMag === mag
-                          ? 'bg-[#F5B544] text-black shadow-[0_0_24px_rgba(245,181,68,0.5)] scale-105'
-                          : 'border border-white/15 bg-black/50 text-neutral-300 hover:border-[#F5B544]/40 hover:bg-[#1a1200]/40 hover:scale-[1.03]'
+                          ? 'bg-white text-black shadow-[0_0_30px_rgba(255,255,255,0.6)] scale-105'
+                          : 'border-2 border-white/20 bg-black/50 text-neutral-200 hover:border-emerald-400/50 hover:bg-emerald-950/30 hover:scale-105'
                       }`}
                     >
                       {mag}
@@ -358,17 +361,11 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
               {/* Frame selector */}
               <motion.div
                 variants={cardVariants}
-                className="rounded-2xl border border-white/8 bg-neutral-900/75 p-4 text-xs text-neutral-200"
+                className="rounded-3xl border border-white/10 bg-neutral-900/80 p-4 text-xs text-neutral-200 shadow-[0_24px_80px_rgba(0,0,0,0.8)]"
               >
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-neutral-500">
-                    Frame style
-                  </p>
-                  <p className="text-[0.7rem] font-medium text-neutral-300">
-                    {currentFrameConfig.label}
-                    {currentColorConfig.name && ` · ${currentColorConfig.name}`}
-                  </p>
-                </div>
+                <p className="mb-3 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+                  Frame style
+                </p>
 
                 <div className="mb-3 grid grid-cols-3 gap-2">
                   {frameConfigs.map((frame) => {
@@ -380,13 +377,13 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                           setSelectedFrameId(frame.id)
                           setSelectedFrameColor(frame.colors[0].value)
                         }}
-                        className={`relative overflow-hidden rounded-xl bg-black/40 transition-all duration-250 ${
+                        className={`relative overflow-hidden rounded-2xl bg-black/40 transition-all duration-300 ${
                           isActive
-                            ? 'border-2 border-[#F5B544] shadow-[0_0_20px_rgba(245,181,68,0.45)] ring-1 ring-[#F5B544]/20'
-                            : 'border border-white/10 hover:border-white/35 hover:scale-[1.03]'
+                            ? 'border-2 border-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.8)] ring-2 ring-emerald-400/30'
+                            : 'border border-white/10 hover:border-white/40 hover:scale-105'
                         }`}
                       >
-                        <div className="relative h-14 w-full">
+                        <div className="relative h-16 w-full">
                           <Image
                             src={frame.baseImage}
                             alt={frame.label}
@@ -394,7 +391,7 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                             className="object-cover"
                           />
                         </div>
-                        <span className="absolute bottom-1 left-2 rounded-full bg-black/70 px-1.5 py-[2px] text-[0.58rem] font-medium text-neutral-200">
+                        <span className="absolute bottom-1 left-2 rounded-full bg-black/75 px-2 py-[2px] text-[0.6rem] font-medium text-neutral-100">
                           {frame.label}
                         </span>
                       </button>
@@ -402,17 +399,28 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                   })}
                 </div>
 
-                <div className="flex flex-wrap gap-1.5">
+                <div className="mb-2 text-[0.7rem] text-neutral-300">
+                  <p className="font-semibold text-neutral-100">
+                    {currentFrameConfig.label}{' '}
+                    {currentColorConfig.name && `· ${currentColorConfig.name}`}
+                  </p>
+                  <p className="mt-1">
+                    Choose a base frame, then fine-tune the finish. All frames
+                    support light mounts and prescription builds.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
                   {currentFrameConfig.colors.map((color) => {
                     const isActive = color.value === selectedFrameColor
                     return (
                       <button
                         key={color.value}
                         onClick={() => setSelectedFrameColor(color.value)}
-                        className={`rounded-full px-3 py-1 text-[0.68rem] font-medium transition-all duration-200 ${
+                        className={`rounded-full px-3 py-1 text-[0.7rem] font-medium transition ${
                           isActive
-                            ? 'bg-[#F5B544] text-black shadow-[0_0_14px_rgba(245,181,68,0.5)]'
-                            : 'border border-white/12 bg-black/40 text-neutral-300 hover:border-[#F5B544]/40 hover:text-white'
+                            ? 'bg-emerald-400 text-black shadow-[0_0_20px_rgba(16,185,129,0.6)]'
+                            : 'border border-white/15 bg-black/40 text-neutral-200 hover:border-white/40'
                         }`}
                       >
                         {color.name}
@@ -422,13 +430,13 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                 </div>
 
                 {/* Frame preview */}
-                <div className="mt-3 w-full">
-                  <div className="relative h-[160px] w-full overflow-hidden rounded-xl border border-[#F5B544]/25 bg-neutral-800">
+                <div className="mt-4 mx-auto w-full max-w-[400px]">
+                  <div className="relative mx-auto h-[180px] min-w-[200px] max-w-[400px] overflow-hidden rounded-xl border-2 border-emerald-400/35 bg-neutral-800 shadow-[0_4px_18px_rgba(0,0,0,0.45)]">
                     <Image
                       src={currentColorConfig.image}
                       alt={`${currentFrameConfig.label} ${currentColorConfig.name}`}
                       fill
-                      className="object-cover transition-opacity duration-400"
+                      className="object-cover"
                     />
                     <div className="pointer-events-none absolute inset-0 z-[2] mix-blend-overlay">
                       <Noise
@@ -436,7 +444,7 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                         patternScaleX={1}
                         patternScaleY={1}
                         patternRefreshInterval={2}
-                        patternAlpha={6}
+                        patternAlpha={8}
                       />
                     </div>
                   </div>
@@ -446,21 +454,22 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
               {/* Subtotal + add to cart */}
               <motion.div
                 variants={cardVariants}
-                className="rounded-2xl border border-white/8 bg-neutral-900/95 p-4"
+                className="rounded-3xl border border-white/10 bg-neutral-900/95 p-4 shadow-[0_24px_90px_rgba(0,0,0,0.8)]"
               >
                 <div className="flex items-center justify-between text-sm text-neutral-200">
-                  <span className="text-neutral-400">Subtotal</span>
-                  <span className="text-base font-semibold text-white">${subtotal}.00</span>
+                  <span>Subtotal</span>
+                  <span className="font-semibold">${subtotal}.00</span>
                 </div>
 
                 <button
                   onClick={handleAddToCart}
-                  className="mt-3 w-full rounded-full bg-[#F5B544] py-3 text-sm font-semibold text-black shadow-[0_0_28px_rgba(245,181,68,0.4)] transition-all duration-250 hover:bg-[#f7c360] hover:shadow-[0_0_36px_rgba(245,181,68,0.55)]"
+                  className="mt-4 w-full rounded-full bg-white py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(255,255,255,0.6)] transition hover:bg-neutral-100"
                 >
                   Add to cart
                 </button>
-                <p className="mt-2.5 text-center text-[0.62rem] text-neutral-600">
-                  Free shipping · 30-day returns · No hidden fees
+                <p className="mt-2 text-[0.65rem] leading-relaxed text-neutral-500">
+                  No hidden service contracts, mandatory bundles, or surprise
+                  fees—just the loupes you actually need.
                 </p>
               </motion.div>
             </motion.div>
@@ -482,13 +491,13 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
               className="flex flex-col justify-between gap-6 lg:flex-row lg:items-start"
             >
               <div className="max-w-lg">
-                <p className="mb-2 text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-neutral-500">
+                <p className="mb-2 text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-neutral-500">
                   Technical detail
                 </p>
-                <h2 className="bg-gradient-to-r from-white via-slate-200 to-[#F5B544]/60 bg-clip-text text-xl font-semibold text-transparent sm:text-2xl">
+                <h2 className="bg-gradient-to-r from-white via-slate-200 to-emerald-200 bg-clip-text text-xl font-semibold text-transparent sm:text-2xl">
                   {config.specTitle}
                 </h2>
-                <p className="mt-2.5 text-sm leading-relaxed text-neutral-400">
+                <p className="mt-3 text-sm leading-relaxed text-neutral-300">
                   {config.specDescription}
                 </p>
               </div>
@@ -504,17 +513,14 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
                   <motion.div
                     key={column.title}
                     variants={cardVariants}
-                    className="rounded-2xl border border-white/8 bg-neutral-900/60 p-4"
+                    className="rounded-2xl border border-white/10 bg-neutral-900/70 p-4"
                   >
-                    <h3 className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-[#F5B544]/80">
+                    <h3 className="text-[0.75rem] font-semibold uppercase tracking-[0.2em] text-neutral-400">
                       {column.title}
                     </h3>
-                    <ul className="mt-3 space-y-2 text-[0.75rem] text-neutral-300">
+                    <ul className="mt-3 space-y-2 text-[0.75rem]">
                       {column.items.map((item) => (
-                        <li key={item} className="flex items-start gap-1.5">
-                          <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-neutral-600" />
-                          {item}
-                        </li>
+                        <li key={item}>{item}</li>
                       ))}
                     </ul>
                   </motion.div>
@@ -550,34 +556,38 @@ export default function ProductPageTemplate({ config }: { config: ProductPageCon
         </section>
 
         {/* FOOTER BANNER */}
-        <section className="relative overflow-hidden border-t border-white/8">
-          <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-4 py-14 lg:px-10 xl:px-16">
-            <div className="relative z-10 max-w-lg space-y-3">
-              <p className="text-[0.6rem] font-semibold uppercase tracking-[0.25em] text-neutral-500">
+        <section className="relative overflow-hidden border-t border-white/10">
+          <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-4 py-16 lg:px-10 xl:px-16">
+            <div className="relative z-10 max-w-xl space-y-3">
+              <p className="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-neutral-400">
                 Built for real operators
               </p>
               <h3 className="text-xl font-semibold text-white sm:text-2xl">
                 Designed in the OR, priced for reality.
               </h3>
-              <p className="text-sm text-neutral-400">
-                Surgeons shouldn&apos;t choose between precision tools and two months of rent.
+              <p className="text-sm text-neutral-300">
+                HeliosX exists because surgeons shouldn&apos;t have to choose
+                between compromised tools and two months of rent. The work is
+                demanding enough—the access should be too.
               </p>
               <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="inline-block rounded-full border border-white/15 bg-white/5 px-5 py-2 text-xs font-medium text-neutral-300 backdrop-blur-md transition-all duration-200 hover:border-white/50 hover:bg-white/10 hover:text-white"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+                className="mt-3 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-neutral-100 backdrop-blur-md transition hover:border-white hover:bg-white hover:text-black"
               >
-                Back to top ↑
+                Back to top
               </button>
             </div>
 
             <div className="pointer-events-none absolute inset-0">
               <Image
                 src="/Walkinghallway2.png"
-                alt="Surgeon hallway"
+                alt="Surgeon hallway banner"
                 fill
-                className="object-cover opacity-25"
+                className="object-cover opacity-30"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/95" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/90" />
             </div>
           </div>
         </section>

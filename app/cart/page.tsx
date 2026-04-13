@@ -134,15 +134,16 @@ export default function CartPage() {
             >
               <Noise patternAlpha={4} />
             </div>
-            <div className="absolute bottom-6 left-6 space-y-1.5">
-              <p className="text-[0.6rem] uppercase tracking-[0.22em] text-neutral-400">
+            <div className="absolute bottom-6 left-6 space-y-1 text-sm text-neutral-100">
+              <p className="text-xs uppercase tracking-[0.2em] text-neutral-300/80">
                 Cart
               </p>
-              <h1 className="bg-gradient-to-r from-white via-slate-200 to-[#F5B544]/70 bg-clip-text text-2xl font-semibold text-transparent lg:text-3xl">
-                Review your order
+              <h1 className="bg-gradient-to-r from-white via-sky-200 to-emerald-200 bg-clip-text text-2xl font-semibold text-transparent lg:text-3xl">
+                Review your configuration
               </h1>
-              <p className="text-xs text-neutral-400">
-                Confirm selections before checkout.
+              <p className="max-w-md text-xs text-neutral-300/80 lg:text-sm">
+                Confirm your loupe system and any add-ons before proceeding to
+                secure Stripe checkout.
               </p>
             </div>
           </motion.div>
@@ -158,7 +159,7 @@ export default function CartPage() {
             {/* Main cart content */}
             <motion.div
               variants={cardVariants}
-              className="flex flex-1 flex-col overflow-hidden rounded-2xl bg-neutral-900/80 p-5 backdrop-blur-xl"
+              className="flex flex-1 flex-col overflow-hidden rounded-3xl bg-gradient-to-b from-neutral-900/90 to-neutral-950 p-6 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl"
             >
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400">
@@ -266,10 +267,10 @@ export default function CartPage() {
             {/* Add-ons */}
             <motion.div
               variants={cardVariants}
-              className="rounded-2xl bg-neutral-900/80 p-5 backdrop-blur-xl"
+              className="rounded-3xl bg-gradient-to-b from-neutral-900/90 to-neutral-950 p-6 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl"
             >
-              <h3 className="mb-3 text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-neutral-500">
-                Add-ons
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-neutral-400">
+                Optional add-ons
               </h3>
 
               <div className="space-y-4 text-sm text-neutral-200">
@@ -281,28 +282,36 @@ export default function CartPage() {
                   }
                   whileHover={{ y: -2 }}
                   transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-                  className={`flex w-full items-center justify-between gap-4 rounded-2xl border px-4 py-3.5 text-left transition-all duration-200 ${
+                  className={`flex w-full items-start justify-between gap-4 rounded-2xl border px-4 py-3 text-left transition sm:items-center sm:gap-6 sm:px-5 sm:py-4 ${
                     includePrescription
-                      ? 'border-[#F5B544]/60 bg-[#1a1200]/40 shadow-[0_0_20px_rgba(245,181,68,0.12)]'
-                      : 'border-white/8 bg-black/40 hover:border-white/20'
+                      ? 'border-white/70 bg-white/10 shadow-[0_0_30px_rgba(255,255,255,0.15)]'
+                      : 'border-white/10 bg-black/40 hover:border-white/30'
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/12 bg-white/5 p-2.5 text-white">
+                  <div className="flex items-start gap-4 sm:gap-5">
+                    <div className="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/5 p-3 text-white shadow-[0_0_16px_rgba(255,255,255,0.05)] sm:h-14 sm:w-14">
                       <Image
                         src="/prescription.png"
                         alt="Prescription icon"
-                        width={28}
-                        height={28}
-                        className="h-5 w-5 object-contain brightness-0 invert"
+                        width={32}
+                        height={32}
+                        className="h-6 w-6 object-contain brightness-0 invert drop-shadow-[0_0_6px_rgba(255,255,255,0.35)] sm:h-7 sm:w-7"
                       />
                     </div>
-                    <div>
-                      <p className="text-xs font-medium text-neutral-200">Prescription lenses</p>
-                      <p className="text-[0.68rem] text-neutral-500">Upload Rx + PD after checkout</p>
+                    <div className="space-y-1">
+                      <p className="text-xs uppercase tracking-[0.2em] text-neutral-400">
+                        Prescription lenses
+                      </p>
+                      <p className="text-sm text-neutral-100">
+                        Integrate your spectacle Rx directly into the system.
+                      </p>
+                      <p className="text-[0.7rem] text-neutral-400">
+                        You&apos;ll upload your prescription and PD after
+                        checkout.
+                      </p>
                     </div>
                   </div>
-                  <span className="whitespace-nowrap text-sm font-semibold text-[#F5B544]">
+                  <span className="ml-2 whitespace-nowrap text-sm font-semibold text-neutral-50 sm:ml-4">
                     +${PRESCRIPTION_ESTIMATE}
                   </span>
                 </motion.button>
@@ -313,28 +322,37 @@ export default function CartPage() {
                   onClick={() => setIncludeWarranty((prev) => !prev)}
                   whileHover={{ y: -2 }}
                   transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-                  className={`flex w-full items-center justify-between gap-4 rounded-2xl border px-4 py-3.5 text-left transition-all duration-200 ${
+                  className={`flex w-full items-start justify-between gap-4 rounded-2xl border px-4 py-3 text-left transition sm:items-center sm:gap-6 sm:px-5 sm:py-4 ${
                     includeWarranty
-                      ? 'border-[#F5B544]/60 bg-[#1a1200]/40 shadow-[0_0_20px_rgba(245,181,68,0.12)]'
-                      : 'border-white/8 bg-black/40 hover:border-white/20'
+                      ? 'border-white/70 bg-white/10 shadow-[0_0_30px_rgba(255,255,255,0.15)]'
+                      : 'border-white/10 bg-black/40 hover:border-white/30'
                   }`}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/12 bg-white/5 p-2.5 text-white">
+                  <div className="flex items-start gap-4 sm:gap-5">
+                    <div className="mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/5 p-3 text-white shadow-[0_0_16px_rgba(255,255,255,0.05)] sm:h-14 sm:w-14">
                       <Image
                         src="/warranty.png"
                         alt="Warranty icon"
-                        width={28}
-                        height={28}
-                        className="h-5 w-5 object-contain brightness-0 invert"
+                        width={32}
+                        height={32}
+                        className="h-6 w-6 object-contain brightness-0 invert drop-shadow-[0_0_6px_rgba(255,255,255,0.35)] sm:h-7 sm:w-7"
                       />
                     </div>
-                    <div>
-                      <p className="text-xs font-medium text-neutral-200">Extended warranty</p>
-                      <p className="text-[0.68rem] text-neutral-500">Coverage beyond standard manufacturing warranty</p>
+                    <div className="space-y-1">
+                      <p className="text-xs uppercase tracking-[0.2em] text-neutral-400">
+                        Extended warranty
+                      </p>
+                      <p className="text-sm text-neutral-100">
+                        Extra coverage beyond the standard manufacturing
+                        warranty.
+                      </p>
+                      <p className="text-[0.7rem] text-neutral-400">
+                        Covers qualifying defects and select repairs within the
+                        extended term.
+                      </p>
                     </div>
                   </div>
-                  <span className="whitespace-nowrap text-sm font-semibold text-[#F5B544]">
+                  <span className="ml-2 whitespace-nowrap text-sm font-semibold text-neutral-50 sm:ml-4">
                     +${WARRANTY_ESTIMATE}
                   </span>
                 </motion.button>
@@ -344,7 +362,7 @@ export default function CartPage() {
             {/* Totals + CTA */}
             <motion.div
               variants={cardVariants}
-              className="rounded-2xl bg-neutral-900/80 p-5 backdrop-blur-xl"
+              className="rounded-3xl bg-gradient-to-b from-neutral-900/90 to-neutral-950 p-6 shadow-[0_0_40px_rgba(0,0,0,0.7)] backdrop-blur-xl"
             >
               <div className="mb-2 flex items-center justify-between text-sm text-neutral-300">
                 <span>Items subtotal</span>
@@ -362,12 +380,13 @@ export default function CartPage() {
               <button
                 disabled={!items.length}
                 onClick={handleCheckout}
-                className="flex w-full items-center justify-center rounded-full bg-[#F5B544] px-6 py-3 text-sm font-semibold text-black shadow-[0_0_28px_rgba(245,181,68,0.35)] transition-all duration-250 hover:bg-[#f7c360] hover:shadow-[0_0_36px_rgba(245,181,68,0.5)] disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-400 disabled:shadow-none"
+                className="flex w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-medium text-black shadow-[0_0_40px_rgba(255,255,255,0.25)] transition hover:translate-y-[1px] hover:bg-neutral-100 disabled:cursor-not-allowed disabled:bg-neutral-500 disabled:text-neutral-200 disabled:shadow-none"
               >
                 Proceed to payment
               </button>
-              <p className="mt-2.5 text-center text-[0.62rem] text-neutral-600">
-                Secured by Stripe · 256-bit encryption
+              <p className="mt-3 text-[0.65rem] text-neutral-500">
+                Test mode only – payments are processed in Stripe&apos;s sandbox
+                environment.
               </p>
             </motion.div>
           </motion.aside>
